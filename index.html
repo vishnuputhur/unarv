@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ml" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-purple: #8B5FBF;
+            --purple-light: #9D71E3;
+            --purple-dark: #6A4A8E;
+            --gradient: linear-gradient(135deg, #8B5FBF 0%, #9D71E3 50%, #B39DDB 100%);
+            --shadow: 0 8px 25px rgba(139, 95, 191, 0.15);
+            --shadow-hover: 0 12px 35px rgba(139, 95, 191, 0.25);
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="dark"] {
+            --card-bg: rgba(45, 45, 45, 0.95);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0 60px 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .app-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: white;
+            font-size: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .app-title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .app-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        /* User Info */
+        .user-greeting {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-purple);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Status Cards */
+        .status-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 10px 0;
+            border-left: 4px solid var(--primary-purple);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] .status-card {
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            color: #fff;
+        }
+
+        .status-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        [data-theme="dark"] .status-title {
+            color: #ccc;
+        }
+
+        .status-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        [data-theme="dark"] .status-value {
+            color: #fff;
+        }
+
+        /* Status Colors */
+        .status-good {
+            color: #22c55e !important;
+        }
+
+        .status-warning {
+            color: #f59e0b !important;
+        }
+
+        .status-danger {
+            color: #ef4444 !important;
+        }
+
+        /* Button Grid */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .app-btn {
+            background: var(--gradient);
+            border: none;
+            border-radius: 15px;
+            padding: 15px 10px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.85rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .app-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .app-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .app-btn:hover::before {
+            left: 100%;
+        }
+
+        .app-btn i {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            grid-column: span 2;
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(248, 248, 248, 0.9);
+            backdrop-filter: blur(10px);
+            color: #666;
+            font-size: 0.75rem;
+            z-index: 1000;
+            border-top: 1px solid rgba(139, 95, 191, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+        }
+
+        [data-theme="dark"] footer {
+            background: rgba(45, 45, 45, 0.9);
+            color: #ccc;
+        }
+
+        .footer-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        .theme-toggle-btn {
+            background: transparent;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 6px 12px;
+            color: #666;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        [data-theme="dark"] .theme-toggle-btn {
+            border-color: #666;
+            color: #ccc;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--gradient);
+            color: white;
+            border-color: var(--primary-purple);
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .button-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .admin-btn {
+                grid-column: span 1;
+            }
+            
+            .app-btn {
+                height: 65px;
+                font-size: 0.8rem;
+            }
+            
+            .app-btn i {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- App Header -->
+        <div class="app-header">
+            <div class="app-logo">
+                <i class="fas fa-university"></i>
+            </div>
+            <h1 class="app-title">Loan Manager</h1>
+            <p class="app-subtitle">Manage your loans efficiently</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <!-- User Greeting -->
+            <div class="user-greeting">
+                Hi, <span id="userName">Loading...</span>! 👋
+            </div>
+
+            <!-- Status Section -->
+            <div class="status-section">
+                <!-- Total Asset -->
+                <div class="status-card">
+                    <div class="status-title">Total Asset</div>
+                    <div class="status-value" id="totalAsset">₹0</div>
+                </div>
+
+                <!-- Loan Balance -->
+                <div class="status-card">
+                    <div class="status-title">Your Loan Balance</div>
+                    <div class="status-value" id="loanBalance">₹0</div>
+                </div>
+
+                <!-- Due Status -->
+                <div class="status-card">
+                    <div class="status-title">Due Status</div>
+                    <div class="status-value" id="dueStatus">Checking...</div>
+                </div>
+            </div>
+
+            <!-- Button Grid -->
+            <div class="button-grid">
+                <!-- Profile Button -->
+                <button class="app-btn" onclick="navigateTo('profile')">
+                    <i class="fas fa-user-circle"></i>
+                    Profile
+                </button>
+
+                <!-- My Loans Button -->
+                <button class="app-btn" onclick="navigateTo('my-loans')">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    My Loans
+                </button>
+
+                <!-- Members Button -->
+                <button class="app-btn" onclick="navigateTo('members')">
+                    <i class="fas fa-users"></i>
+                    Members
+                </button>
+
+                <!-- My Investment Button -->
+                <button class="app-btn" onclick="navigateTo('investment')">
+                    <i class="fas fa-chart-line"></i>
+                    My Investment
+                </button>
+
+                <!-- Change Password Button -->
+                <button class="app-btn" onclick="navigateTo('change-password')">
+                    <i class="fas fa-key"></i>
+                    Change Password
+                </button>
+
+                <!-- Payment History Button -->
+                <button class="app-btn" onclick="navigateTo('payment-history')">
+                    <i class="fas fa-history"></i>
+                    Payment History
+                </button>
+
+                <!-- Admin Button (Visible only for admin) -->
+                <div id="adminSection" style="display: none;">
+                    <button class="app-btn admin-btn" onclick="navigateTo('admin')">
+                        <i class="fas fa-cog"></i>
+                        Admin Panel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-text">
+            <p>© 2024 Loan Management System</p>
+        </div>
+        <button id="themeToggle" class="theme-toggle-btn">🌞</button>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A",
+            authDomain: "unarv-33742.firebaseapp.com",
+            projectId: "unarv-33742",
+            storageBucket: "unarv-33742.firebasestorage.app",
+            messagingSenderId: "682302871290",
+            appId: "1:682302871290:web:e0fb6742752bbeb6515b43",
+            measurementId: "G-J0N12VXQJ9"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // DOM Elements
+        const userNameEl = document.getElementById('userName');
+        const totalAssetEl = document.getElementById('totalAsset');
+        const loanBalanceEl = document.getElementById('loanBalance');
+        const dueStatusEl = document.getElementById('dueStatus');
+        const adminSection = document.getElementById('adminSection');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Auth State Listener
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                loadUserData(user.uid);
+                loadFinancialData(user.uid);
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Load User Data
+        async function loadUserData(userId) {
+            try {
+                const userDoc = await db.collection('users').doc(userId).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    userNameEl.textContent = userData.name || 'User';
+                    
+                    // Show admin section if user is admin
+                    if (userData.role === 'admin') {
+                        adminSection.style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        // Load Financial Data
+        async function loadFinancialData(userId) {
+            try {
+                // Load total asset (sum of all investments)
+                const investmentsSnap = await db.collection('investments')
+                    .where('userId', '==', userId)
+                    .get();
+                
+                let totalAsset = 0;
+                investmentsSnap.forEach(doc => {
+                    const investment = doc.data();
+                    totalAsset += investment.amount || 0;
+                });
+                totalAssetEl.textContent = `₹${totalAsset.toLocaleString()}`;
+
+                // Load loan balance
+                const loansSnap = await db.collection('loans')
+                    .where('userId', '==', userId)
+                    .where('status', '==', 'active')
+                    .get();
+                
+                let totalLoanBalance = 0;
+                loansSnap.forEach(doc => {
+                    const loan = doc.data();
+                    totalLoanBalance += loan.balance || 0;
+                });
+                loanBalanceEl.textContent = `₹${totalLoanBalance.toLocaleString()}`;
+
+                // Load due status
+                const dueSnap = await db.collection('payments')
+                    .where('userId', '==', userId)
+                    .where('status', '==', 'pending')
+                    .get();
+                
+                const pendingPayments = dueSnap.size;
+                if (pendingPayments > 0) {
+                    dueStatusEl.textContent = `${pendingPayments} Payments Due`;
+                    dueStatusEl.className = 'status-value status-danger';
+                } else {
+                    dueStatusEl.textContent = 'No Dues - Good!';
+                    dueStatusEl.className = 'status-value status-good';
+                }
+
+            } catch (error) {
+                console.error('Error loading financial data:', error);
+                totalAssetEl.textContent = '₹0';
+                loanBalanceEl.textContent = '₹0';
+                dueStatusEl.textContent = 'Error loading status';
+                dueStatusEl.className = 'status-value status-warning';
+            }
+        }
+
+        // Navigation Function
+        function navigateTo(page) {
+            const pages = {
+                'profile': 'profile.html',
+                'my-loans': 'my-loans.html',
+                'members': 'members.html',
+                'investment': 'investment.html',
+                'change-password': 'change-password.html',
+                'payment-history': 'payment-history.html',
+                'admin': 'admin.html'
+            };
+            
+            if (pages[page]) {
+                window.location.href = pages[page];
+            }
+        }
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
+        });
+
+        // Set initial theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'light' ? '🌞' : '🌙';
+    </script>
+</body>
+</html>
