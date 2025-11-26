@@ -43,21 +43,26 @@
             overflow-x: hidden;
         }
 
-        /* Header - Mobile Optimized */
+        /* Header - Fixed with proper margins */
         .header-container {
             width: 100%;
-            height: 80px;
+            height: 70px; /* 15% reduced from original */
             overflow: hidden;
             margin: 0;
             flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 10px; /* Added padding to prevent sides out */
         }
 
         .header-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Changed to contain to prevent cropping */
             object-position: center;
             display: block;
+            max-width: 100%; /* Ensure it doesn't overflow */
         }
 
         /* Main Content - Mobile Optimized */
@@ -230,7 +235,7 @@
         /* Mobile Responsive - Further Optimizations */
         @media (max-width: 480px) {
             .header-container {
-                height: 70px;
+                height: 60px; /* Reduced for smaller screens */
             }
             
             .content-wrapper {
@@ -265,7 +270,7 @@
 
         @media (max-width: 360px) {
             .header-container {
-                height: 60px;
+                height: 50px; /* Further reduced for very small screens */
             }
             
             .content-wrapper {
@@ -305,7 +310,7 @@
 </head>
 <body>
     <div class="container-fix">
-        <!-- Header -->
+        <!-- Header - Fixed with proper containment -->
         <div class="header-container">
             <img src="head.png" alt="Header" class="header-image">
         </div>
