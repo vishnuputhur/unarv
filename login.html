@@ -12,7 +12,7 @@
             --primary-orange: #FF6B35;
             --orange-light: #FF8C42;
             --orange-dark: #E55A2B;
-            --orange-grad: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
+            --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
             --shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
             --shadow-hover: 0 12px 35px rgba(255, 107, 53, 0.25);
             --card-bg: rgba(255, 255, 255, 0.95);
@@ -22,87 +22,68 @@
             --card-bg: rgba(45, 45, 45, 0.95);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 180px 0 60px 0; /* Header & Footer space */
+            padding: 130px 0 40px 0; /* Header & Footer space */
+            margin: 0;
             position: relative;
-            overflow-x: hidden;
         }
 
-        /* Fixed Header */
-        .fixed-header {
+        /* Fixed Header - Mobile Optimized */
+        .header-image {
+            width: 100%;
+            height: 120px; /* Fixed height for better control */
+            object-fit: cover; /* Ensures image covers the area without distortion */
+            display: block;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 150px;
-            z-index: 1000;
-            background: transparent;
+            z-index: 999;
         }
 
-        .header-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* Logo Section */
-        .logo-section {
-            text-align: center;
-            margin: -80px 0 30px 0;
-            position: relative;
-            z-index: 100;
-        }
-
+        /* Logo Container */
         .logo-container {
-            display: inline-block;
-            background: white;
-            padding: 15px;
+            text-align: center;
+            margin: 10px 0 20px 0;
+        }
+
+        .logo-container img {
+            max-height: 120px;
+            max-width: 120px;
             border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 3px solid white;
+            object-fit: cover;
+        }
+
+        /* Fallback Logo */
+        .logo-fallback {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: white;
+            font-size: 2.5rem;
             box-shadow: var(--shadow);
             border: 3px solid white;
         }
 
-        .logo-image {
-            max-height: 120px;
-            max-width: 120px;
-            border-radius: 15px;
-            object-fit: cover;
-        }
-
-        .logo-fallback {
-            width: 120px;
-            height: 120px;
-            border-radius: 15px;
-            background: var(--orange-grad);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2.5rem;
-        }
-
         .app-title {
             color: white;
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            margin: 15px 0 5px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 10px 0 5px 0;
         }
 
         .app-subtitle {
             color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            font-weight: 400;
+            font-size: 1rem;
         }
 
         /* Main Card */
@@ -110,20 +91,18 @@
             background: var(--card-bg);
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 30px;
+            padding: 25px;
             box-shadow: var(--shadow);
             border: 1px solid rgba(255, 255, 255, 0.2);
             margin: 0 auto 30px;
             max-width: 450px;
-            position: relative;
         }
 
-        .card-title {
+        .main-card h2 {
             text-align: center;
             margin-bottom: 25px;
             color: var(--primary-orange);
             font-weight: 600;
-            font-size: 1.8rem;
         }
 
         /* Form Styling */
@@ -131,7 +110,6 @@
             font-weight: 500;
             color: #333;
             margin-bottom: 8px;
-            font-size: 0.95rem;
         }
 
         [data-theme="dark"] .form-label {
@@ -139,30 +117,27 @@
         }
 
         .form-control {
-            border-radius: 12px;
-            padding: 14px 16px;
+            border-radius: 10px;
+            padding: 12px 15px;
             border: 2px solid #e9ecef;
             transition: all 0.3s ease;
-            font-size: 1rem;
         }
 
         .form-control:focus {
             border-color: var(--primary-orange);
-            box-shadow: 0 0 0 0.3rem rgba(255, 107, 53, 0.15);
+            box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
         }
 
         /* Buttons */
         .btn-login {
-            background: var(--orange-grad);
+            background: var(--gradient);
             border: none;
-            border-radius: 12px;
-            padding: 14px 30px;
+            border-radius: 10px;
+            padding: 12px 30px;
             font-weight: 600;
             width: 100%;
             transition: all 0.3s ease;
-            font-size: 1.1rem;
             color: white;
-            margin: 10px 0;
         }
 
         .btn-login:hover {
@@ -170,38 +145,10 @@
             box-shadow: var(--shadow-hover);
         }
 
-        .btn-admin {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
-            padding: 14px 30px;
-            font-weight: 600;
-            width: 100%;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            color: white;
-            margin: 10px 0;
-            display: none; /* Hidden by default */
-        }
-
-        .btn-admin:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.25);
-        }
-
-        /* Checkbox */
+        /* Checkbox Styling */
         .form-check-input:checked {
             background-color: var(--primary-orange);
             border-color: var(--primary-orange);
-        }
-
-        .form-check-label {
-            font-weight: 500;
-            color: #555;
-        }
-
-        [data-theme="dark"] .form-check-label {
-            color: #ccc;
         }
 
         /* Links */
@@ -210,7 +157,6 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
-            font-size: 0.95rem;
         }
 
         .forgot-password:hover {
@@ -219,26 +165,26 @@
         }
 
         /* Fixed Footer */
-        .fixed-footer {
+        footer {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(248, 248, 248, 0.95);
+            background: rgba(248, 248, 248, 0.9);
             backdrop-filter: blur(10px);
             color: #666;
             font-size: 0.8rem;
             z-index: 1000;
-            border-top: 2px solid rgba(255, 107, 53, 0.2);
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
-            height: 50px;
+            padding: 8px 20px;
+            height: 40px;
         }
 
-        [data-theme="dark"] .fixed-footer {
-            background: rgba(45, 45, 45, 0.95);
+        [data-theme="dark"] footer {
+            background: rgba(45, 45, 45, 0.9);
             color: #ccc;
         }
 
@@ -248,13 +194,14 @@
             font-weight: 500;
         }
 
+        /* Theme Toggle */
         .theme-toggle-btn {
             background: transparent;
-            border: 2px solid #ccc;
-            border-radius: 25px;
-            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 5px 10px;
             color: #666;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             transition: all 0.3s ease;
             cursor: pointer;
         }
@@ -265,48 +212,26 @@
         }
 
         .theme-toggle-btn:hover {
-            background: var(--orange-grad);
+            background: var(--gradient);
             color: white;
             border-color: var(--primary-orange);
         }
 
-        /* Loading Animation */
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            margin: 10px 0;
-        }
-
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--primary-orange);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive Design */
+        /* Responsive Design - Mobile First */
         @media (max-width: 768px) {
             body {
-                padding: 140px 15px 60px 15px;
+                padding: 110px 15px 40px 15px;
             }
             
-            .fixed-header {
-                height: 120px;
+            .header-image {
+                height: 100px;
             }
             
-            .logo-section {
-                margin: -60px 0 25px 0;
+            .logo-container {
+                margin: 5px 0 15px 0;
             }
             
-            .logo-image, .logo-fallback {
+            .logo-container img {
                 max-height: 100px;
                 max-width: 100px;
             }
@@ -315,48 +240,6 @@
                 width: 100px;
                 height: 100px;
                 font-size: 2rem;
-            }
-            
-            .app-title {
-                font-size: 1.8rem;
-            }
-            
-            .app-subtitle {
-                font-size: 1rem;
-            }
-            
-            .main-card {
-                padding: 25px;
-                margin: 0 auto 25px;
-            }
-            
-            .card-title {
-                font-size: 1.6rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            body {
-                padding: 120px 10px 60px 10px;
-            }
-            
-            .fixed-header {
-                height: 100px;
-            }
-            
-            .logo-section {
-                margin: -50px 0 20px 0;
-            }
-            
-            .logo-image, .logo-fallback {
-                max-height: 80px;
-                max-width: 80px;
-            }
-            
-            .logo-fallback {
-                width: 80px;
-                height: 80px;
-                font-size: 1.8rem;
             }
             
             .app-title {
@@ -369,107 +252,131 @@
             
             .main-card {
                 padding: 20px;
+                margin: 0 10px 30px 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 100px 10px 40px 10px;
             }
             
-            .card-title {
-                font-size: 1.4rem;
+            .header-image {
+                height: 90px;
+            }
+            
+            .logo-container img {
+                max-height: 80px;
+                max-width: 80px;
+            }
+            
+            .logo-fallback {
+                width: 80px;
+                height: 80px;
+                font-size: 1.8rem;
+            }
+            
+            .app-title {
+                font-size: 1.3rem;
+            }
+            
+            .app-subtitle {
+                font-size: 0.8rem;
+            }
+            
+            .main-card {
+                padding: 15px;
+            }
+            
+            .main-card h2 {
+                font-size: 1.3rem;
+                margin-bottom: 20px;
             }
             
             .form-control {
-                padding: 12px 14px;
+                padding: 10px 12px;
             }
             
-            .btn-login, .btn-admin {
-                padding: 12px 20px;
-                font-size: 1rem;
+            footer {
+                padding: 6px 15px;
+                height: 35px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .header-image {
+                height: 80px;
             }
             
-            .fixed-footer {
-                padding: 8px 15px;
-                height: 45px;
-                font-size: 0.75rem;
+            body {
+                padding: 90px 5px 40px 5px;
             }
+        }
+
+        /* Loading State */
+        .btn-loading {
+            opacity: 0.7;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
     <!-- Fixed Header -->
-    <header class="fixed-header">
-        <img src="head.png" alt="Loan Manager Header" class="header-image" 
-             onerror="this.style.display='none'">
-    </header>
-
-    <!-- Logo Section -->
-    <section class="logo-section">
+    <img src="head.png" alt="Loan Manager Header" class="header-image" 
+         onerror="this.style.display='none'">
+    
+    <main class="container">
         <div class="logo-container">
-            <img src="logo.jpg" alt="Loan Manager Logo" class="logo-image" 
+            <!-- Logo with Fallback -->
+            <img src="logo.jpg" alt="Loan Manager Logo" class="img-fluid"
                  onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+            
             <div id="logoFallback" class="logo-fallback" style="display: none;">
                 <i class="fas fa-university"></i>
             </div>
+            
+            <h1 class="app-title">Loan Manager</h1>
+            <p class="app-subtitle">Smart Financial Management</p>
         </div>
-        <h1 class="app-title">Loan Manager</h1>
-        <p class="app-subtitle">Smart Loan Management System</p>
-    </section>
-
-    <!-- Main Content -->
-    <main class="container">
+        
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="main-card">
-                    <h2 class="card-title">Welcome Back!</h2>
-                    
-                    <!-- Loading Spinner -->
-                    <div id="loadingSpinner" class="loading-spinner">
-                        <div class="spinner"></div>
-                        <p style="margin-top: 10px; color: var(--primary-orange);">Checking authentication...</p>
-                    </div>
-
-                    <form id="loginForm" style="display: none;">
+                    <h2>Login</h2>
+                    <form id="loginForm">
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email Address</label>
+                            <label for="email" class="form-label">Email:</label>
                             <input type="email" class="form-control" id="email" required 
-                                   placeholder="Enter your email address">
+                                   placeholder="Enter your email">
                         </div>
-                        
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
+                            <label for="password" class="form-label">Password:</label>
                             <input type="password" class="form-control" id="password" required 
                                    placeholder="Enter your password">
                         </div>
-                        
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="showPassword">
                             <label class="form-check-label" for="showPassword">Show Password</label>
                         </div>
-                        
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="rememberMe">
                             <label class="form-check-label" for="rememberMe">Remember Me</label>
                         </div>
-                        
-                        <button type="submit" class="btn btn-login">
-                            <i class="fas fa-sign-in-alt me-2"></i>Login to Account
+                        <button type="submit" class="btn btn-login mb-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
                         </button>
-
-                        <!-- Admin Dashboard Button (Visible only for admin) -->
-                        <button type="button" id="adminDashboardBtn" class="btn btn-admin">
-                            <i class="fas fa-cog me-2"></i>Admin Dashboard
-                        </button>
-                        
-                        <div class="text-center mt-3">
-                            <a href="#" id="forgotPassword" class="forgot-password">
-                                <i class="fas fa-key me-1"></i>Forgot Password?
-                            </a>
-                        </div>
+                        <a href="#" id="forgotPassword" class="forgot-password d-block text-center">
+                            <i class="fas fa-key me-1"></i>Forgot Password?
+                        </a>
                     </form>
                 </div>
             </div>
         </div>
     </main>
-
+    
     <!-- Fixed Footer -->
-    <footer class="fixed-footer">
+    <footer>
         <div class="footer-text">
             <p>Powered by VTSoft 2025</p>
         </div>
@@ -498,165 +405,141 @@
             const auth = firebase.auth();
             const db = firebase.firestore();
 
-            // DOM Elements
-            const loginForm = document.getElementById('loginForm');
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            const adminDashboardBtn = document.getElementById('adminDashboardBtn');
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-
-            // Check authentication state on page load
-            auth.onAuthStateChanged(async (user) => {
+            // Check if user is already logged in
+            auth.onAuthStateChanged((user) => {
                 if (user) {
-                    // User is logged in, check if admin
-                    try {
-                        const userDoc = await db.collection('users').doc(user.uid).get();
-                        if (userDoc.exists) {
-                            const userData = userDoc.data();
-                            
-                            // Show admin button if user is admin
-                            if (userData.role === 'admin') {
-                                adminDashboardBtn.style.display = 'block';
-                            }
-                            
-                            // Redirect to main page if already logged in
-                            window.location.href = 'index.html';
-                        }
-                    } catch (error) {
-                        console.error('Error checking user role:', error);
-                    }
-                } else {
-                    // User is not logged in, show login form
-                    loadingSpinner.style.display = 'none';
-                    loginForm.style.display = 'block';
+                    // Redirect to index.html if already logged in
+                    window.location.href = 'index.html';
                 }
             });
 
             // Login Form
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = emailInput.value.trim();
-                const password = passwordInput.value;
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('email').value.trim();
+                    const password = document.getElementById('password').value;
 
-                // Email validation
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    alert('ദയവായി സാധുവായ ഇമെയിൽ വിലാസം നൽകുക.');
-                    return;
-                }
-
-                // Show loading
-                const submitBtn = loginForm.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Signing In...';
-                submitBtn.disabled = true;
-
-                try {
-                    const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                    const user = userCredential.user;
-                    
-                    // Get user data to check role
-                    const userDoc = await db.collection('users').doc(user.uid).get();
-                    
-                    if (userDoc.exists) {
-                        const userData = userDoc.data();
-                        
-                        // Show success message based on role
-                        if (userData.role === 'admin') {
-                            alert('അഡ്മിൻ ലോഗിൻ വിജയിച്ചു! ഡാഷ്ബോർഡിലേക്ക് പോകുന്നു...');
-                        } else {
-                            alert('ലോഗിൻ വിജയിച്ചു! ഹോമ്പേജിലേക്ക് പോകുന്നു...');
-                        }
-                        
-                        window.location.href = 'index.html';
-                    } else {
-                        alert('യൂസർ ഡാറ്റ കണ്ടെത്തിയില്ല. അഡ്മിനെ സമീപിക്കുക.');
-                        await auth.signOut();
+                    // Email validation
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        alert('ദയവായി സാധുവായ ഇമെയിൽ വിലാസം നൽകുക.');
+                        return;
                     }
-                } catch (error) {
-                    let errorMessage = 'ലോഗിൻ പരാജയപ്പെട്ടു! ';
-                    
-                    switch (error.code) {
-                        case 'auth/user-not-found':
-                            errorMessage += 'യൂസർ കണ്ടെത്തിയില്ല.';
-                            break;
-                        case 'auth/wrong-password':
-                            errorMessage += 'തപ്പുള്ള പാസ്സ്വേഡ്.';
-                            break;
-                        case 'auth/invalid-email':
-                            errorMessage += 'സാധുവല്ലാത്ത ഇമെയിൽ.';
-                            break;
-                        default:
-                            errorMessage += error.message;
-                    }
-                    
-                    alert(errorMessage);
-                } finally {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }
-            });
 
-            // Admin Dashboard Button
-            adminDashboardBtn.addEventListener('click', () => {
-                window.location.href = 'admin.html';
-            });
+                    // Show loading state
+                    const submitBtn = loginForm.querySelector('button[type="submit"]');
+                    submitBtn.classList.add('btn-loading');
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Logging in...';
 
-            // Forgot Password
-            document.getElementById('forgotPassword').addEventListener('click', (e) => {
-                e.preventDefault();
-                const email = emailInput.value.trim();
-                if (email) {
-                    auth.sendPasswordResetEmail(email)
-                        .then(() => {
-                            alert('പാസ്സ്വേഡ് റീസെറ്റ് ഇമെയിൽ അയച്ചു! ഇമെയിൽ ചെക്ക് ചെയ്യുക.');
+                    auth.signInWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            const user = userCredential.user;
+                            return db.collection('users').doc(user.uid).get();
+                        })
+                        .then((doc) => {
+                            if (doc.exists) {
+                                alert('ലോഗിൻ വിജയിച്ചു! ഹോമ്പേജിലേക്ക് പോകുന്നു...');
+                                window.location.href = 'index.html';
+                            } else {
+                                alert('യൂസർ ഡാറ്റ കണ്ടെത്തിയില്ല. അഡ്മിനെ സമീപിക്കുക.');
+                                auth.signOut();
+                            }
                         })
                         .catch((error) => {
-                            alert('പാസ്സ്വേഡ് റീസെറ്റ് പരാജയപ്പെട്ടു: ' + error.message);
+                            let errorMessage = 'ലോഗിൻ പരാജയപ്പെട്ടു! ';
+                            
+                            switch (error.code) {
+                                case 'auth/user-not-found':
+                                    errorMessage += 'യൂസർ കണ്ടെത്തിയില്ല.';
+                                    break;
+                                case 'auth/wrong-password':
+                                    errorMessage += 'തപ്പുള്ള പാസ്സ്വേഡ്.';
+                                    break;
+                                case 'auth/invalid-email':
+                                    errorMessage += 'സാധുവല്ലാത്ത ഇമെയിൽ.';
+                                    break;
+                                default:
+                                    errorMessage += error.message;
+                            }
+                            
+                            alert(errorMessage);
+                        })
+                        .finally(() => {
+                            // Reset button state
+                            submitBtn.classList.remove('btn-loading');
+                            submitBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Login';
                         });
-                } else {
-                    alert('ദയവായി നിങ്ങളുടെ ഇമെയിൽ നൽകുക!');
-                }
-            });
+                });
+            }
 
-            // Show Password
-            document.getElementById('showPassword').addEventListener('change', (e) => {
-                passwordInput.type = e.target.checked ? 'text' : 'password';
-            });
+            // Forgot Password
+            const forgotPassword = document.getElementById('forgotPassword');
+            if (forgotPassword) {
+                forgotPassword.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('email').value.trim();
+                    if (email) {
+                        auth.sendPasswordResetEmail(email)
+                            .then(() => {
+                                alert('പാസ്സ്വേഡ് റീസെറ്റ് ഇമെയിൽ അയച്ചു! ഇമെയിൽ ചെക്ക് ചെയ്യുക.');
+                            })
+                            .catch((error) => {
+                                alert('പാസ്സ്വേഡ് റീസെറ്റ് പരാജയപ്പെട്ടു: ' + error.message);
+                            });
+                    } else {
+                        alert('ദയവായി നിങ്ങളുടെ ഇമെയിൽ നൽകുക!');
+                    }
+                });
+            }
 
             // Remember Me
             const rememberMe = document.getElementById('rememberMe');
-            rememberMe.addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    localStorage.setItem('rememberEmail', emailInput.value);
-                } else {
-                    localStorage.removeItem('rememberEmail');
-                }
-            });
+            if (rememberMe) {
+                rememberMe.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        localStorage.setItem('rememberEmail', document.getElementById('email').value);
+                    } else {
+                        localStorage.removeItem('rememberEmail');
+                    }
+                });
+            }
+
+            // Show Password
+            const showPassword = document.getElementById('showPassword');
+            if (showPassword) {
+                showPassword.addEventListener('change', (e) => {
+                    const passwordField = document.getElementById('password');
+                    passwordField.type = e.target.checked ? 'text' : 'password';
+                });
+            }
 
             // Theme Toggle
             const themeToggle = document.getElementById('themeToggle');
-            themeToggle.addEventListener('click', () => {
-                const html = document.documentElement;
-                const currentTheme = html.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                html.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
-            });
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const html = document.documentElement;
+                    const currentTheme = html.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                    html.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    
+                    themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
+                });
+
+                // Set initial theme
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                themeToggle.textContent = savedTheme === 'light' ? '🌞' : '🌙';
+            }
 
             // Load remembered email
             const savedEmail = localStorage.getItem('rememberEmail');
             if (savedEmail) {
-                emailInput.value = savedEmail;
-                rememberMe.checked = true;
+                document.getElementById('email').value = savedEmail;
+                document.getElementById('rememberMe').checked = true;
             }
-
-            // Set initial theme
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            themeToggle.textContent = savedTheme === 'light' ? '🌞' : '🌙';
 
         } catch (error) {
             alert('Firebase initialization error: ' + error.message);
