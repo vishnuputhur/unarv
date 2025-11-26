@@ -34,16 +34,19 @@
             min-height: 100vh;
             margin: 0;
             position: relative;
-            padding-bottom: 50px; /* Footer height */
+            padding-bottom: 45px; /* Footer height - 10% reduced */
+            transform: scale(0.9); /* Total page 10% smaller */
+            transform-origin: top center;
+            width: 100%;
         }
 
-        /* Fixed Header with 5mm side gaps */
+        /* Fixed Header - 15% smaller */
         .header-container {
             position: relative;
             width: 100%;
-            height: 120px;
+            height: 102px; /* 15% reduced from 120px */
             overflow: hidden;
-            padding: 0 5mm; /* 5mm gap on left and right */
+            padding: 0 5mm;
         }
 
         .header-image {
@@ -52,40 +55,40 @@
             object-fit: cover;
             object-position: center;
             display: block;
-            border-radius: 0 0 15px 15px; /* Rounded bottom corners */
+            border-radius: 0 0 12px 12px;
         }
 
-        /* 15mm gap after header */
+        /* Content with reduced gaps */
         .content-wrapper {
-            padding: 15mm 5mm 20px 5mm; /* 15mm top, 5mm sides */
+            padding: 12mm 5mm 15px 5mm; /* Reduced top gap */
         }
 
-        /* Login Card */
+        /* Login Card - Smaller */
         .login-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 25px;
+            border-radius: 18px;
+            padding: 22px; /* Reduced padding */
             box-shadow: var(--shadow);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 400px;
+            max-width: 360px; /* Reduced width */
             margin: 0 auto;
         }
 
         .login-title {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px; /* Reduced */
             color: var(--primary-orange);
             font-weight: 600;
-            font-size: 1.5rem;
+            font-size: 1.35rem; /* Smaller font */
         }
 
-        /* Form Styling */
+        /* Form Styling - Smaller */
         .form-label {
             font-weight: 500;
             color: #333;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            margin-bottom: 6px; /* Reduced */
+            font-size: 0.85rem; /* Smaller */
         }
 
         [data-theme="dark"] .form-label {
@@ -93,11 +96,11 @@
         }
 
         .form-control {
-            border-radius: 12px;
-            padding: 14px 16px;
+            border-radius: 10px;
+            padding: 12px 14px; /* Reduced */
             border: 2px solid #e9ecef;
             transition: all 0.3s ease;
-            font-size: 1rem;
+            font-size: 0.95rem; /* Smaller */
         }
 
         .form-control:focus {
@@ -105,18 +108,18 @@
             box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.15);
         }
 
-        /* Buttons */
+        /* Buttons - Smaller */
         .btn-login {
             background: var(--gradient);
             border: none;
-            border-radius: 12px;
-            padding: 14px 30px;
+            border-radius: 10px;
+            padding: 12px 25px; /* Reduced */
             font-weight: 600;
             width: 100%;
             transition: all 0.3s ease;
             color: white;
-            font-size: 1rem;
-            margin: 10px 0;
+            font-size: 0.95rem; /* Smaller */
+            margin: 8px 0; /* Reduced */
         }
 
         .btn-login:hover {
@@ -124,7 +127,7 @@
             box-shadow: var(--shadow-hover);
         }
 
-        /* Checkbox */
+        /* Checkbox - Smaller */
         .form-check-input:checked {
             background-color: var(--primary-orange);
             border-color: var(--primary-orange);
@@ -133,20 +136,20 @@
         .form-check-label {
             font-weight: 500;
             color: #555;
-            font-size: 0.9rem;
+            font-size: 0.85rem; /* Smaller */
         }
 
         [data-theme="dark"] .form-check-label {
             color: #ccc;
         }
 
-        /* Links */
+        /* Links - Smaller */
         .forgot-password {
             color: var(--primary-orange);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.85rem; /* Smaller */
         }
 
         .forgot-password:hover {
@@ -154,7 +157,7 @@
             text-decoration: underline;
         }
 
-        /* Fixed Footer - Always at bottom with side gaps */
+        /* Fixed Footer - Smaller */
         .footer {
             position: fixed;
             bottom: 0;
@@ -163,14 +166,16 @@
             background: rgba(248, 248, 248, 0.95);
             backdrop-filter: blur(10px);
             color: #666;
-            font-size: 0.8rem;
+            font-size: 0.72rem; /* Smaller */
             z-index: 1000;
             border-top: 2px solid rgba(255, 107, 53, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 5mm; /* 5mm side gaps */
-            height: 50px;
+            padding: 8px 5mm; /* Reduced */
+            height: 45px; /* Reduced */
+            transform: scale(0.9); /* 10% smaller */
+            transform-origin: bottom center;
         }
 
         [data-theme="dark"] .footer {
@@ -187,10 +192,10 @@
         .theme-toggle-btn {
             background: transparent;
             border: 2px solid #ccc;
-            border-radius: 20px;
-            padding: 6px 12px;
+            border-radius: 18px; /* Smaller */
+            padding: 5px 10px; /* Reduced */
             color: #666;
-            font-size: 0.8rem;
+            font-size: 0.72rem; /* Smaller */
             transition: all 0.3s ease;
             cursor: pointer;
         }
@@ -212,99 +217,108 @@
             pointer-events: none;
         }
 
-        /* Mobile Responsive */
+        /* Mobile Responsive - Adjusted */
         @media (max-width: 768px) {
             .header-container {
-                height: 100px;
+                height: 85px; /* Adjusted */
                 padding: 0 4mm;
             }
             
             .content-wrapper {
-                padding: 12mm 4mm 20px 4mm;
+                padding: 10mm 4mm 12px 4mm; /* Reduced */
             }
             
             .login-card {
-                padding: 20px;
+                padding: 18px; /* Reduced */
+                max-width: 320px; /* Smaller */
             }
             
             .login-title {
-                font-size: 1.3rem;
-                margin-bottom: 20px;
+                font-size: 1.2rem; /* Smaller */
+                margin-bottom: 18px; /* Reduced */
             }
             
             .footer {
-                padding: 10px 4mm;
+                padding: 7px 4mm; /* Reduced */
+                transform: scale(0.85); /* More smaller on mobile */
             }
         }
 
         @media (max-width: 576px) {
             .header-container {
-                height: 80px;
+                height: 68px; /* Adjusted */
                 padding: 0 3mm;
             }
             
             .content-wrapper {
-                padding: 10mm 3mm 20px 3mm;
+                padding: 8mm 3mm 10px 3mm; /* Reduced */
             }
             
             .login-card {
-                padding: 18px;
-                border-radius: 18px;
+                padding: 16px; /* Reduced */
+                border-radius: 15px;
+                max-width: 300px; /* Smaller */
             }
             
             .login-title {
-                font-size: 1.2rem;
+                font-size: 1.1rem; /* Smaller */
             }
             
             .form-control {
-                padding: 12px 14px;
-                font-size: 0.95rem;
+                padding: 10px 12px; /* Reduced */
+                font-size: 0.9rem; /* Smaller */
             }
             
             .btn-login {
-                padding: 12px 20px;
-                font-size: 0.95rem;
+                padding: 10px 18px; /* Reduced */
+                font-size: 0.9rem; /* Smaller */
             }
             
             .footer {
-                padding: 8px 3mm;
-                height: 45px;
-                font-size: 0.75rem;
+                padding: 6px 3mm; /* Reduced */
+                height: 40px; /* Reduced */
+                font-size: 0.65rem; /* Smaller */
+                transform: scale(0.8); /* Even smaller */
             }
         }
 
         @media (max-width: 400px) {
             .header-container {
-                height: 70px;
+                height: 60px; /* Adjusted */
                 padding: 0 2mm;
             }
             
             .content-wrapper {
-                padding: 8mm 2mm 20px 2mm;
+                padding: 6mm 2mm 8px 2mm; /* Reduced */
             }
             
             .login-card {
-                padding: 15px;
+                padding: 14px; /* Reduced */
             }
             
             .login-title {
-                font-size: 1.1rem;
+                font-size: 1rem; /* Smaller */
             }
             
             .footer {
-                padding: 8px 2mm;
+                padding: 5px 2mm; /* Reduced */
+                transform: scale(0.75); /* Smallest */
             }
         }
 
         /* Extra small devices */
         @media (max-width: 360px) {
             .header-container {
-                height: 60px;
+                height: 51px; /* Adjusted */
                 padding: 0 2mm;
             }
             
             .content-wrapper {
-                padding: 6mm 2mm 20px 2mm;
+                padding: 5mm 2mm 5px 2mm; /* Reduced */
+            }
+            
+            body {
+                transform: scale(0.85); /* More reduction on small screens */
             }
         }
 
@@ -312,61 +326,69 @@
         html, body {
             height: 100%;
         }
+
+        /* Prevent horizontal scroll */
+        .container-fix {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
     </style>
 </head>
 <body>
-    <!-- Header with 5mm side gaps -->
-    <div class="header-container">
-        <img src="head.png" alt="Header" class="header-image">
-    </div>
-
-    <!-- Main Content with 15mm top gap and 5mm side gaps -->
-    <div class="content-wrapper">
-        <div class="login-card">
-            <h2 class="login-title">Login</h2>
-            <form id="loginForm">
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email:</label>
-                    <input type="email" class="form-control" id="email" required 
-                           placeholder="Enter your email">
-                </div>
-                
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password:</label>
-                    <input type="password" class="form-control" id="password" required 
-                           placeholder="Enter your password">
-                </div>
-                
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="showPassword">
-                    <label class="form-check-label" for="showPassword">Show Password</label>
-                </div>
-                
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="rememberMe">
-                    <label class="form-check-label" for="rememberMe">Remember Me</label>
-                </div>
-                
-                <button type="submit" class="btn btn-login">
-                    <i class="fas fa-sign-in-alt me-2"></i>Login
-                </button>
-                
-                <div class="text-center mt-3">
-                    <a href="#" id="forgotPassword" class="forgot-password">
-                        <i class="fas fa-key me-1"></i>Forgot Password?
-                    </a>
-                </div>
-            </form>
+    <div class="container-fix">
+        <!-- Header - 15% smaller -->
+        <div class="header-container">
+            <img src="head.png" alt="Header" class="header-image">
         </div>
-    </div>
 
-    <!-- Fixed Footer with 5mm side gaps -->
-    <footer class="footer">
-        <div class="footer-text">
-            <p>Powered by VTSoft 2025</p>
+        <!-- Main Content with reduced gaps -->
+        <div class="content-wrapper">
+            <div class="login-card">
+                <h2 class="login-title">Login</h2>
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" required 
+                               placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" class="form-control" id="password" required 
+                               placeholder="Enter your password">
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="showPassword">
+                        <label class="form-check-label" for="showPassword">Show Password</label>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember Me</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-login">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </button>
+                    
+                    <div class="text-center mt-2"> <!-- Reduced margin -->
+                        <a href="#" id="forgotPassword" class="forgot-password">
+                            <i class="fas fa-key me-1"></i>Forgot Password?
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <button id="themeToggle" class="theme-toggle-btn">🌞</button>
-    </footer>
+
+        <!-- Fixed Footer - 10% smaller -->
+        <footer class="footer">
+            <div class="footer-text">
+                <p>Powered by VTSoft 2025</p>
+            </div>
+            <button id="themeToggle" class="theme-toggle-btn">🌞</button>
+        </footer>
+    </div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
