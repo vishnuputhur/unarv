@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="ml" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Loan Management System</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,85 +12,132 @@
             --primary-orange: #FF6B35;
             --orange-light: #FF8C42;
             --orange-dark: #E55A2B;
-            --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA07A 100%);
-            --shadow: 0 4px 15px rgba(255, 107, 53, 0.15);
-            --shadow-hover: 0 6px 20px rgba(255, 107, 53, 0.25);
+            --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
+            --shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+            --shadow-hover: 0 12px 35px rgba(255, 107, 53, 0.25);
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="dark"] {
+            --card-bg: rgba(45, 45, 45, 0.95);
+            --text-color: #ffffff;
+            --input-bg: #333333;
+            --input-border: #555555;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 4mm 5mm 60px 5mm;
             margin: 0;
-            transform: scale(0.8);
-            transform-origin: top center;
-            width: 125%;
-            margin-left: -12.5%;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        /* Header Styles */
-        .header-container {
-            text-align: center;
-            margin-bottom: 15px;
-            height: 90px;
+            padding: 0;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            color: var(--text-color, #333);
+            overflow-x: hidden;
+        }
+
+        /* Header - Fixed with proper margins */
+        .header-container {
+            width: 100%;
+            height: 70px;
+            overflow: hidden;
+            margin: 0;
+            flex-shrink: 0;
+            display: flex;
             justify-content: center;
+            align-items: center;
+            padding: 0 10px;
         }
 
         .header-image {
             width: 100%;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            max-width: 100%;
         }
 
-        /* Main Card */
-        .main-card {
-            background: white;
+        /* Main Content - Mobile Optimized */
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px 15px;
+            width: 100%;
+        }
+
+        /* Dashboard Card - Mobile Optimized */
+        .dashboard-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
             border-radius: 15px;
-            padding: 15px;
+            padding: 25px;
             box-shadow: var(--shadow);
-            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
         }
 
-        /* User Info */
         .user-greeting {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-orange);
-            margin-bottom: 12px;
             text-align: center;
+            margin-bottom: 25px;
+            color: var(--primary-orange);
+            font-weight: 600;
+            font-size: 1.4rem;
         }
 
         /* Status Cards */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
         .status-card {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 12px;
+            padding: 15px;
             border-radius: 12px;
-            margin: 8px 0;
             border-left: 4px solid var(--primary-orange);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        [data-theme="dark"] .status-card {
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            color: #fff;
         }
 
         .status-title {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #666;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             font-weight: 500;
         }
 
+        [data-theme="dark"] .status-title {
+            color: #ccc;
+        }
+
         .status-value {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #2d3748;
+        }
+
+        [data-theme="dark"] .status-value {
+            color: #fff;
         }
 
         /* Status Colors */
@@ -110,21 +157,21 @@
         .button-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 10px;
         }
 
         .app-btn {
             background: var(--gradient);
             border: none;
             border-radius: 12px;
-            padding: 12px 8px;
+            padding: 15px 10px;
             color: white;
             font-weight: 500;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             box-shadow: var(--shadow);
             transition: all 0.3s ease;
-            height: 60px;
+            height: 70px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -134,61 +181,55 @@
         }
 
         .app-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: var(--shadow-hover);
         }
 
         .app-btn i {
-            font-size: 1.1rem;
-            margin-bottom: 4px;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
         }
 
         .admin-btn {
-            background: linear-gradient(135deg, #FF6B35 0%, #E55A2B 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             grid-column: span 2;
         }
 
         /* Footer */
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
+        .footer {
             width: 100%;
-            background: white;
-            color: #666;
-            font-size: 0.7rem;
-            z-index: 1000;
-            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            background: var(--card-bg);
+            color: var(--text-color, #666);
+            font-size: 0.8rem;
+            border-top: 2px solid rgba(255, 107, 53, 0.3);
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 6px 15px;
-            text-align: center;
+            padding: 10px 15px;
+            flex-shrink: 0;
         }
 
-        /* Responsive */
-        @media (max-width: 576px) {
-            body {
-                padding: 4mm 5mm 50px 5mm;
-            }
-            
-            .button-grid {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-            
-            .admin-btn {
-                grid-column: span 1;
-            }
-            
-            .app-btn {
-                height: 55px;
-                font-size: 0.7rem;
-            }
-            
-            .app-btn i {
-                font-size: 1rem;
-            }
+        .footer-text {
+            flex: 1;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .theme-toggle-btn {
+            background: transparent;
+            border: 2px solid var(--text-color, #ccc);
+            border-radius: 15px;
+            padding: 6px 10px;
+            color: var(--text-color, #666);
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--gradient);
+            color: white;
+            border-color: var(--primary-orange);
         }
 
         /* Loading States */
@@ -196,104 +237,200 @@
             opacity: 0.7;
             pointer-events: none;
         }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .header-container {
+                height: 60px;
+            }
+            
+            .content-wrapper {
+                padding: 15px 10px;
+            }
+            
+            .dashboard-card {
+                padding: 20px;
+                border-radius: 12px;
+            }
+            
+            .user-greeting {
+                font-size: 1.2rem;
+                margin-bottom: 20px;
+            }
+            
+            .status-grid {
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+            
+            .status-card {
+                padding: 12px;
+            }
+            
+            .status-value {
+                font-size: 1.1rem;
+            }
+            
+            .button-grid {
+                gap: 10px;
+            }
+            
+            .app-btn {
+                height: 65px;
+                font-size: 0.8rem;
+                padding: 12px 8px;
+            }
+            
+            .app-btn i {
+                font-size: 1.2rem;
+            }
+            
+            .footer {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .header-container {
+                height: 50px;
+            }
+            
+            .content-wrapper {
+                padding: 10px 8px;
+            }
+            
+            .dashboard-card {
+                padding: 15px;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-btn {
+                grid-column: span 1;
+            }
+        }
+
+        /* Prevent horizontal scroll */
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        .container-fix {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container-fix">
         <!-- Header -->
         <div class="header-container">
             <img src="head.png" alt="Header" class="header-image" onerror="this.style.display='none'">
         </div>
 
-        <!-- Main Card -->
-        <div class="main-card">
-            <!-- User Greeting -->
-            <div class="user-greeting">
-                Hi, <span id="userName">Loading...</span>! 👋
-            </div>
-
-            <!-- Status Section -->
-            <div class="status-section">
-                <!-- Total Asset -->
-                <div class="status-card">
-                    <div class="status-title">Total Asset</div>
-                    <div class="status-value" id="totalAsset">₹0</div>
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <div class="dashboard-card">
+                <!-- User Greeting -->
+                <div class="user-greeting">
+                    Hi, <span id="userName">Loading...</span>! 👋
                 </div>
 
-                <!-- Loan Balance -->
-                <div class="status-card">
-                    <div class="status-title">Your Loan Balance</div>
-                    <div class="status-value" id="loanBalance">₹0</div>
+                <!-- Status Section -->
+                <div class="status-grid">
+                    <!-- Total Asset -->
+                    <div class="status-card">
+                        <div class="status-title">Total Asset</div>
+                        <div class="status-value" id="totalAsset">₹0</div>
+                    </div>
+
+                    <!-- Loan Balance -->
+                    <div class="status-card">
+                        <div class="status-title">Your Loan Balance</div>
+                        <div class="status-value" id="loanBalance">₹0</div>
+                    </div>
+
+                    <!-- Due Status -->
+                    <div class="status-card" style="grid-column: span 2;">
+                        <div class="status-title">Due Status</div>
+                        <div class="status-value" id="dueStatus">Checking...</div>
+                    </div>
                 </div>
 
-                <!-- Due Status -->
-                <div class="status-card">
-                    <div class="status-title">Due Status</div>
-                    <div class="status-value" id="dueStatus">Checking...</div>
-                </div>
-            </div>
-
-            <!-- Button Grid -->
-            <div class="button-grid">
-                <!-- Profile Button -->
-                <button class="app-btn" onclick="navigateTo('profile')">
-                    <i class="fas fa-user-circle"></i>
-                    Profile
-                </button>
-
-                <!-- My Loans Button -->
-                <button class="app-btn" onclick="navigateTo('my-loans')">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    My Loans
-                </button>
-
-                <!-- Members Button -->
-                <button class="app-btn" onclick="navigateTo('members')">
-                    <i class="fas fa-users"></i>
-                    Members
-                </button>
-
-                <!-- Subscription Button -->
-                <button class="app-btn" onclick="navigateTo('subscription')">
-                    <i class="fas fa-credit-card"></i>
-                    Subscription
-                </button>
-
-                <!-- My Investment Button -->
-                <button class="app-btn" onclick="navigateTo('investment')">
-                    <i class="fas fa-chart-line"></i>
-                    My Investment
-                </button>
-
-                <!-- Change Password Button -->
-                <button class="app-btn" onclick="navigateTo('change-password')">
-                    <i class="fas fa-key"></i>
-                    Change Password
-                </button>
-
-                <!-- Payment History Button -->
-                <button class="app-btn" onclick="navigateTo('payment-history')">
-                    <i class="fas fa-history"></i>
-                    Payment History
-                </button>
-
-                <!-- Admin Button (Visible only for admin) -->
-                <div id="adminSection" style="display: none;">
-                    <button class="app-btn admin-btn" onclick="navigateTo('admin')">
-                        <i class="fas fa-cog"></i>
-                        Admin Panel
+                <!-- Button Grid -->
+                <div class="button-grid">
+                    <!-- Profile Button -->
+                    <button class="app-btn" onclick="navigateTo('profile')">
+                        <i class="fas fa-user-circle"></i>
+                        Profile
                     </button>
+
+                    <!-- My Loans Button -->
+                    <button class="app-btn" onclick="navigateTo('my-loans')">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        My Loans
+                    </button>
+
+                    <!-- Members Button -->
+                    <button class="app-btn" onclick="navigateTo('members')">
+                        <i class="fas fa-users"></i>
+                        Members
+                    </button>
+
+                    <!-- Subscription Button -->
+                    <button class="app-btn" onclick="navigateTo('subscription')">
+                        <i class="fas fa-credit-card"></i>
+                        Subscription
+                    </button>
+
+                    <!-- My Investment Button -->
+                    <button class="app-btn" onclick="navigateTo('investment')">
+                        <i class="fas fa-chart-line"></i>
+                        My Investment
+                    </button>
+
+                    <!-- Change Password Button -->
+                    <button class="app-btn" onclick="navigateTo('change-password')">
+                        <i class="fas fa-key"></i>
+                        Change Password
+                    </button>
+
+                    <!-- Payment History Button -->
+                    <button class="app-btn" onclick="navigateTo('payment-history')">
+                        <i class="fas fa-history"></i>
+                        Payment History
+                    </button>
+
+                    <!-- Admin Button (Visible only for admin) -->
+                    <div id="adminSection" style="display: none; grid-column: span 2;">
+                        <button class="app-btn admin-btn" onclick="navigateTo('admin')">
+                            <i class="fas fa-cog"></i>
+                            Admin Panel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-text">
-            <p>© 2024 Loan Management System</p>
-        </div>
-    </footer>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-text">
+                <p>Powered by VTSoft 2025</p>
+            </div>
+            <button id="themeToggle" class="theme-toggle-btn">🌞</button>
+        </footer>
+    </div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -312,140 +449,148 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        try {
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const db = firebase.firestore();
 
-        // DOM Elements
-        const userNameEl = document.getElementById('userName');
-        const totalAssetEl = document.getElementById('totalAsset');
-        const loanBalanceEl = document.getElementById('loanBalance');
-        const dueStatusEl = document.getElementById('dueStatus');
-        const adminSection = document.getElementById('adminSection');
+            // DOM Elements
+            const userNameEl = document.getElementById('userName');
+            const totalAssetEl = document.getElementById('totalAsset');
+            const loanBalanceEl = document.getElementById('loanBalance');
+            const dueStatusEl = document.getElementById('dueStatus');
+            const adminSection = document.getElementById('adminSection');
+            const themeToggle = document.getElementById('themeToggle');
 
-        // Auth State Listener
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                loadUserData(user.uid);
-                loadFinancialData(user.uid);
-            } else {
-                // Redirect to login if not authenticated
-                window.location.href = 'login.html';
-            }
-        });
-
-        // Load User Data
-        async function loadUserData(userId) {
-            try {
-                const userDoc = await db.collection('users').doc(userId).get();
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    userNameEl.textContent = userData.name || 'User';
-                    
-                    // Show admin section if user is admin
-                    if (userData.role === 'admin') {
-                        adminSection.style.display = 'block';
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading user data:', error);
-                showError('ഉപയോക്തൃ വിവരങ്ങൾ ലോഡ് ചെയ്യാനായില്ല');
-            }
-        }
-
-        // Load Financial Data
-        async function loadFinancialData(userId) {
-            try {
-                // Load total asset (sum of all investments)
-                const investmentsSnap = await db.collection('investments')
-                    .where('userId', '==', userId)
-                    .get();
-                
-                let totalAsset = 0;
-                investmentsSnap.forEach(doc => {
-                    const investment = doc.data();
-                    totalAsset += parseFloat(investment.amount) || 0;
-                });
-                totalAssetEl.textContent = `₹${totalAsset.toLocaleString()}`;
-
-                // Load loan balance
-                const loansSnap = await db.collection('loans')
-                    .where('userId', '==', userId)
-                    .where('status', '==', 'active')
-                    .get();
-                
-                let totalLoanBalance = 0;
-                loansSnap.forEach(doc => {
-                    const loan = doc.data();
-                    totalLoanBalance += parseFloat(loan.balance) || 0;
-                });
-                loanBalanceEl.textContent = `₹${totalLoanBalance.toLocaleString()}`;
-
-                // Load due status
-                const dueSnap = await db.collection('payments')
-                    .where('userId', '==', userId)
-                    .where('status', '==', 'pending')
-                    .get();
-                
-                const pendingPayments = dueSnap.size;
-                if (pendingPayments > 0) {
-                    dueStatusEl.textContent = `${pendingPayments} Payments Due`;
-                    dueStatusEl.className = 'status-value status-danger';
+            // Auth State Listener
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    loadUserData(user.uid);
+                    loadFinancialData(user.uid);
                 } else {
-                    dueStatusEl.textContent = 'No Dues - Good!';
-                    dueStatusEl.className = 'status-value status-good';
+                    // Redirect to login if not authenticated
+                    window.location.href = 'login.html';
                 }
+            });
 
-            } catch (error) {
-                console.error('Error loading financial data:', error);
-                totalAssetEl.textContent = '₹0';
-                loanBalanceEl.textContent = '₹0';
-                dueStatusEl.textContent = 'Error loading status';
-                dueStatusEl.className = 'status-value status-warning';
-                showError('ഫിനാൻഷ്യൽ ഡാറ്റ ലോഡ് ചെയ്യാനായില്ല');
+            // Load User Data
+            async function loadUserData(userId) {
+                try {
+                    const userDoc = await db.collection('users').doc(userId).get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        userNameEl.textContent = userData.name || 'User';
+                        
+                        // Show admin section if user is admin
+                        if (userData.role === 'admin') {
+                            adminSection.style.display = 'block';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading user data:', error);
+                    showError('ഉപയോക്തൃ വിവരങ്ങൾ ലോഡ് ചെയ്യാനായില്ല');
+                }
             }
+
+            // Load Financial Data
+            async function loadFinancialData(userId) {
+                try {
+                    // Load total asset (sum of all investments)
+                    const investmentsSnap = await db.collection('investments')
+                        .where('userId', '==', userId)
+                        .get();
+                    
+                    let totalAsset = 0;
+                    investmentsSnap.forEach(doc => {
+                        const investment = doc.data();
+                        totalAsset += parseFloat(investment.amount) || 0;
+                    });
+                    totalAssetEl.textContent = `₹${totalAsset.toLocaleString()}`;
+
+                    // Load loan balance
+                    const loansSnap = await db.collection('loans')
+                        .where('userId', '==', userId)
+                        .where('status', '==', 'active')
+                        .get();
+                    
+                    let totalLoanBalance = 0;
+                    loansSnap.forEach(doc => {
+                        const loan = doc.data();
+                        totalLoanBalance += parseFloat(loan.balance) || 0;
+                    });
+                    loanBalanceEl.textContent = `₹${totalLoanBalance.toLocaleString()}`;
+
+                    // Load due status
+                    const dueSnap = await db.collection('payments')
+                        .where('userId', '==', userId)
+                        .where('status', '==', 'pending')
+                        .get();
+                    
+                    const pendingPayments = dueSnap.size;
+                    if (pendingPayments > 0) {
+                        dueStatusEl.textContent = `${pendingPayments} Payments Due`;
+                        dueStatusEl.className = 'status-value status-danger';
+                    } else {
+                        dueStatusEl.textContent = 'No Dues - Good!';
+                        dueStatusEl.className = 'status-value status-good';
+                    }
+
+                } catch (error) {
+                    console.error('Error loading financial data:', error);
+                    totalAssetEl.textContent = '₹0';
+                    loanBalanceEl.textContent = '₹0';
+                    dueStatusEl.textContent = 'Error loading status';
+                    dueStatusEl.className = 'status-value status-warning';
+                    showError('ഫിനാൻഷ്യൽ ഡാറ്റ ലോഡ് ചെയ്യാനായില്ല');
+                }
+            }
+
+            // Navigation Function
+            function navigateTo(page) {
+                const pages = {
+                    'profile': 'profile.html',
+                    'my-loans': 'my-loans.html',
+                    'members': 'members.html',
+                    'subscription': 'subscription.html',
+                    'investment': 'investment.html',
+                    'change-password': 'change-password.html',
+                    'payment-history': 'payment-history.html',
+                    'admin': 'admin.html'
+                };
+                
+                if (pages[page]) {
+                    window.location.href = pages[page];
+                } else {
+                    showError('പേജ് നോട്ട് ഫൗണ്ട്');
+                }
+            }
+
+            // Error Display Function
+            function showError(message) {
+                alert(message);
+            }
+
+            // Theme Toggle
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const html = document.documentElement;
+                    const currentTheme = html.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                    html.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    
+                    themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
+                });
+
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                themeToggle.textContent = savedTheme === 'light' ? '🌞' : '🌙';
+            }
+
+        } catch (error) {
+            alert('Firebase initialization error: ' + error.message);
+            console.error('Firebase error:', error);
         }
-
-        // Navigation Function
-        function navigateTo(page) {
-            const pages = {
-                'profile': 'profile.html',
-                'my-loans': 'my-loans.html',
-                'members': 'members.html',
-                'subscription': 'subscription.html',
-                'investment': 'investment.html',
-                'change-password': 'change-password.html',
-                'payment-history': 'payment-history.html',
-                'admin': 'admin.html'
-            };
-            
-            if (pages[page]) {
-                window.location.href = pages[page];
-            } else {
-                showError('പേജ് നോട്ട് ഫൗണ്ട്');
-            }
-        }
-
-        // Error Display Function
-        function showError(message) {
-            alert(message);
-        }
-
-        // Prevent zoom on mobile
-        document.addEventListener('touchstart', function(event) {
-            if (event.touches.length > 1) {
-                event.preventDefault();
-            }
-        });
-
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
     </script>
 </body>
 </html>
