@@ -34,19 +34,19 @@
             min-height: 100vh;
             margin: 0;
             position: relative;
-            padding-bottom: 45px; /* Footer height - 10% reduced */
-            transform: scale(0.9); /* Total page 10% smaller */
+            padding-bottom: 40px; /* Reduced footer space */
+            transform: scale(0.8); /* 20% smaller total */
             transform-origin: top center;
             width: 100%;
         }
 
-        /* Fixed Header - 15% smaller */
+        /* Fixed Header - More smaller with 4mm top gap */
         .header-container {
             position: relative;
-            width: 100%;
-            height: 102px; /* 15% reduced from 120px */
+            width: calc(100% - 10mm); /* 5mm each side */
+            height: 90px; /* More reduced */
             overflow: hidden;
-            padding: 0 5mm;
+            margin: 4mm auto 0 auto; /* 4mm top gap, auto sides */
         }
 
         .header-image {
@@ -55,40 +55,40 @@
             object-fit: cover;
             object-position: center;
             display: block;
-            border-radius: 0 0 12px 12px;
+            border-radius: 0 0 10px 10px;
         }
 
-        /* Content with reduced gaps */
+        /* Content with minimal gaps */
         .content-wrapper {
-            padding: 12mm 5mm 15px 5mm; /* Reduced top gap */
+            padding: 8mm 5mm 10px 5mm; /* Reduced gaps */
         }
 
-        /* Login Card - Smaller */
+        /* Login Card - More compact */
         .login-card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border-radius: 18px;
-            padding: 22px; /* Reduced padding */
+            border-radius: 15px;
+            padding: 20px; /* More reduced */
             box-shadow: var(--shadow);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 360px; /* Reduced width */
+            max-width: 320px; /* More compact */
             margin: 0 auto;
         }
 
         .login-title {
             text-align: center;
-            margin-bottom: 20px; /* Reduced */
+            margin-bottom: 15px; /* More reduced */
             color: var(--primary-orange);
             font-weight: 600;
-            font-size: 1.35rem; /* Smaller font */
+            font-size: 1.2rem; /* Smaller */
         }
 
-        /* Form Styling - Smaller */
+        /* Form Styling - More compact */
         .form-label {
             font-weight: 500;
             color: #333;
-            margin-bottom: 6px; /* Reduced */
-            font-size: 0.85rem; /* Smaller */
+            margin-bottom: 5px; /* More reduced */
+            font-size: 0.8rem; /* Smaller */
         }
 
         [data-theme="dark"] .form-label {
@@ -96,11 +96,11 @@
         }
 
         .form-control {
-            border-radius: 10px;
-            padding: 12px 14px; /* Reduced */
+            border-radius: 8px;
+            padding: 10px 12px; /* More reduced */
             border: 2px solid #e9ecef;
             transition: all 0.3s ease;
-            font-size: 0.95rem; /* Smaller */
+            font-size: 0.9rem; /* Smaller */
         }
 
         .form-control:focus {
@@ -108,18 +108,18 @@
             box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.15);
         }
 
-        /* Buttons - Smaller */
+        /* Buttons - More compact */
         .btn-login {
             background: var(--gradient);
             border: none;
-            border-radius: 10px;
-            padding: 12px 25px; /* Reduced */
+            border-radius: 8px;
+            padding: 10px 20px; /* More reduced */
             font-weight: 600;
             width: 100%;
             transition: all 0.3s ease;
             color: white;
-            font-size: 0.95rem; /* Smaller */
-            margin: 8px 0; /* Reduced */
+            font-size: 0.9rem; /* Smaller */
+            margin: 6px 0; /* Reduced */
         }
 
         .btn-login:hover {
@@ -136,7 +136,7 @@
         .form-check-label {
             font-weight: 500;
             color: #555;
-            font-size: 0.85rem; /* Smaller */
+            font-size: 0.8rem; /* Smaller */
         }
 
         [data-theme="dark"] .form-check-label {
@@ -149,7 +149,7 @@
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
-            font-size: 0.85rem; /* Smaller */
+            font-size: 0.8rem; /* Smaller */
         }
 
         .forgot-password:hover {
@@ -157,30 +157,30 @@
             text-decoration: underline;
         }
 
-        /* Fixed Footer - Smaller */
+        /* Fixed Footer - Full width white background */
         .footer {
             position: fixed;
             bottom: 0;
             left: 0;
-            width: 100%;
-            background: rgba(248, 248, 248, 0.95);
-            backdrop-filter: blur(10px);
+            width: 100%; /* Full width */
+            background: white; /* Solid white background */
             color: #666;
-            font-size: 0.72rem; /* Smaller */
+            font-size: 0.7rem; /* Smaller */
             z-index: 1000;
-            border-top: 2px solid rgba(255, 107, 53, 0.2);
+            border-top: 2px solid rgba(255, 107, 53, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 5mm; /* Reduced */
-            height: 45px; /* Reduced */
-            transform: scale(0.9); /* 10% smaller */
+            padding: 8px 20px; /* Proper padding */
+            height: 40px; /* Compact */
+            transform: scale(0.8); /* Smaller footer */
             transform-origin: bottom center;
         }
 
         [data-theme="dark"] .footer {
-            background: rgba(45, 45, 45, 0.95);
+            background: #2d2d2d; /* Dark background */
             color: #ccc;
+            border-top: 2px solid rgba(255, 107, 53, 0.5);
         }
 
         .footer-text {
@@ -192,10 +192,10 @@
         .theme-toggle-btn {
             background: transparent;
             border: 2px solid #ccc;
-            border-radius: 18px; /* Smaller */
-            padding: 5px 10px; /* Reduced */
+            border-radius: 15px;
+            padding: 4px 8px;
             color: #666;
-            font-size: 0.72rem; /* Smaller */
+            font-size: 0.65rem;
             transition: all 0.3s ease;
             cursor: pointer;
         }
@@ -217,108 +217,114 @@
             pointer-events: none;
         }
 
-        /* Mobile Responsive - Adjusted */
+        /* Mobile Responsive - More compact */
         @media (max-width: 768px) {
             .header-container {
-                height: 85px; /* Adjusted */
-                padding: 0 4mm;
+                height: 75px;
+                width: calc(100% - 8mm);
+                margin: 3mm auto 0 auto;
             }
             
             .content-wrapper {
-                padding: 10mm 4mm 12px 4mm; /* Reduced */
+                padding: 6mm 4mm 8px 4mm;
             }
             
             .login-card {
-                padding: 18px; /* Reduced */
-                max-width: 320px; /* Smaller */
+                padding: 16px;
+                max-width: 280px;
             }
             
             .login-title {
-                font-size: 1.2rem; /* Smaller */
-                margin-bottom: 18px; /* Reduced */
+                font-size: 1.1rem;
+                margin-bottom: 12px;
             }
             
             .footer {
-                padding: 7px 4mm; /* Reduced */
-                transform: scale(0.85); /* More smaller on mobile */
+                padding: 6px 15px;
+                transform: scale(0.75);
             }
         }
 
         @media (max-width: 576px) {
+            body {
+                transform: scale(0.75); /* More smaller on mobile */
+            }
+            
             .header-container {
-                height: 68px; /* Adjusted */
-                padding: 0 3mm;
+                height: 60px;
+                width: calc(100% - 6mm);
+                margin: 2mm auto 0 auto;
             }
             
             .content-wrapper {
-                padding: 8mm 3mm 10px 3mm; /* Reduced */
+                padding: 4mm 3mm 5px 3mm;
             }
             
             .login-card {
-                padding: 16px; /* Reduced */
-                border-radius: 15px;
-                max-width: 300px; /* Smaller */
+                padding: 14px;
+                border-radius: 12px;
+                max-width: 260px;
             }
             
             .login-title {
-                font-size: 1.1rem; /* Smaller */
+                font-size: 1rem;
             }
             
             .form-control {
-                padding: 10px 12px; /* Reduced */
-                font-size: 0.9rem; /* Smaller */
+                padding: 8px 10px;
+                font-size: 0.85rem;
             }
             
             .btn-login {
-                padding: 10px 18px; /* Reduced */
-                font-size: 0.9rem; /* Smaller */
+                padding: 8px 16px;
+                font-size: 0.85rem;
             }
             
             .footer {
-                padding: 6px 3mm; /* Reduced */
-                height: 40px; /* Reduced */
-                font-size: 0.65rem; /* Smaller */
-                transform: scale(0.8); /* Even smaller */
+                padding: 5px 12px;
+                height: 35px;
+                font-size: 0.6rem;
+                transform: scale(0.7);
             }
         }
 
         @media (max-width: 400px) {
             .header-container {
-                height: 60px; /* Adjusted */
-                padding: 0 2mm;
+                height: 50px;
+                width: calc(100% - 4mm);
+                margin: 2mm auto 0 auto;
             }
             
             .content-wrapper {
-                padding: 6mm 2mm 8px 2mm; /* Reduced */
+                padding: 3mm 2mm 4px 2mm;
             }
             
             .login-card {
-                padding: 14px; /* Reduced */
+                padding: 12px;
             }
             
             .login-title {
-                font-size: 1rem; /* Smaller */
+                font-size: 0.9rem;
             }
             
             .footer {
-                padding: 5px 2mm; /* Reduced */
-                transform: scale(0.75); /* Smallest */
+                padding: 4px 10px;
+                transform: scale(0.65);
             }
         }
 
         /* Extra small devices */
         @media (max-width: 360px) {
+            body {
+                transform: scale(0.7);
+            }
+            
             .header-container {
-                height: 51px; /* Adjusted */
-                padding: 0 2mm;
+                height: 45px;
             }
             
             .content-wrapper {
-                padding: 5mm 2mm 5px 2mm; /* Reduced */
-            }
-            
-            body {
-                transform: scale(0.85); /* More reduction on small screens */
+                padding: 2mm 2mm 3px 2mm;
             }
         }
 
@@ -336,12 +342,12 @@
 </head>
 <body>
     <div class="container-fix">
-        <!-- Header - 15% smaller -->
+        <!-- Header with 4mm top gap and 5mm side gaps -->
         <div class="header-container">
             <img src="head.png" alt="Header" class="header-image">
         </div>
 
-        <!-- Main Content with reduced gaps -->
+        <!-- Main Content with minimal gaps -->
         <div class="content-wrapper">
             <div class="login-card">
                 <h2 class="login-title">Login</h2>
@@ -372,7 +378,7 @@
                         <i class="fas fa-sign-in-alt me-2"></i>Login
                     </button>
                     
-                    <div class="text-center mt-2"> <!-- Reduced margin -->
+                    <div class="text-center mt-2">
                         <a href="#" id="forgotPassword" class="forgot-password">
                             <i class="fas fa-key me-1"></i>Forgot Password?
                         </a>
@@ -381,7 +387,7 @@
             </div>
         </div>
 
-        <!-- Fixed Footer - 10% smaller -->
+        <!-- Fixed Footer - Full width white background -->
         <footer class="footer">
             <div class="footer-text">
                 <p>Powered by VTSoft 2025</p>
