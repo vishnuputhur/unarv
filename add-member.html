@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Add Member - Loan Management System</title>
+    <title>Add New Member</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* --- SAME THEME STYLES --- */
         :root {
             --primary-orange: #FF6B35;
             --orange-light: #FF8C42;
@@ -25,57 +26,41 @@
             --input-border: #555555;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            margin: 0;
-            padding: 70px 0 30px 0;
             color: var(--text-color, #333);
-            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Header - Fixed at top */
+        /* Header */
         .header-container {
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 70px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden;
-            z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 0 10px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
         }
 
         .header-image {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            object-position: center;
-            display: block;
-            max-width: 100%;
         }
 
-        /* Main Content */
+        /* Content */
         .content-wrapper {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
+            flex: 1;
             padding: 20px 15px;
-            width: 100%;
-            min-height: calc(100vh - 100px);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Aligned to top for scrolling forms */
         }
 
         /* Form Card */
@@ -87,308 +72,180 @@
             box-shadow: var(--shadow);
             border: 1px solid rgba(255, 255, 255, 0.2);
             width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
+            max-width: 500px;
+            margin-bottom: 50px; /* Space for footer */
         }
 
-        .page-title {
-            text-align: center;
-            margin-bottom: 25px;
-            color: var(--primary-orange);
-            font-weight: 600;
-            font-size: 1.5rem;
-        }
-
-        /* Form Styling */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: var(--text-color, #333);
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            display: block;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid var(--input-border, #e9ecef);
-            border-radius: 8px;
-            font-size: 1rem;
-            background-color: var(--input-bg, #fff);
-            color: var(--text-color, #333);
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-orange);
-            box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.15);
-            outline: none;
-        }
-
-        .form-select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid var(--input-border, #e9ecef);
-            border-radius: 8px;
-            font-size: 1rem;
-            background-color: var(--input-bg, #fff);
-            color: var(--text-color, #333);
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        .btn-action {
-            border: none;
-            border-radius: 10px;
-            padding: 12px 20px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            cursor: pointer;
+        .page-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(0,0,0,0.05);
+            padding-bottom: 15px;
         }
 
-        .btn-save {
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-color, #333);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            margin-right: 15px;
+            transition: color 0.3s;
+        }
+
+        .back-btn:hover { color: var(--primary-orange); }
+
+        .page-title {
+            margin: 0;
+            color: var(--primary-orange);
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+
+        /* Form Controls */
+        .form-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 2px solid var(--input-border, #e9ecef);
+            background-color: var(--input-bg, #fff);
+            color: var(--text-color, #333);
+            margin-bottom: 15px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-orange);
+            box-shadow: none;
+        }
+
+        .btn-submit {
             background: var(--gradient);
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
             color: white;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: var(--shadow);
         }
 
-        .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
 
-        .btn-cancel {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-cancel:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-        }
-
-        /* Footer - Fixed at bottom */
+        /* Footer */
         .footer {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background: var(--card-bg);
-            color: var(--text-color, #666);
-            font-size: 0.7rem;
-            border-top: 1px solid rgba(255, 107, 53, 0.3);
+            border-top: 2px solid rgba(255, 107, 53, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 5px 15px;
-            z-index: 1000;
-            height: 30px;
+            padding: 10px 15px;
+            z-index: 100;
         }
 
-        .footer-text {
-            flex: 1;
-            text-align: center;
-            font-weight: 500;
-        }
-
+        .footer-text { font-size: 0.8rem; font-weight: 500; }
+        
         .theme-toggle-btn {
             background: transparent;
             border: 1px solid var(--text-color, #ccc);
             border-radius: 12px;
             padding: 2px 8px;
-            color: var(--text-color, #666);
-            font-size: 0.65rem;
-            transition: all 0.3s ease;
             cursor: pointer;
-        }
-
-        .theme-toggle-btn:hover {
-            background: var(--gradient);
-            color: white;
-            border-color: var(--primary-orange);
-        }
-
-        /* Loading State */
-        .btn-loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 480px) {
-            body {
-                padding: 60px 0 28px 0;
-            }
-            
-            .header-container {
-                height: 60px;
-            }
-            
-            .content-wrapper {
-                padding: 15px 10px;
-                min-height: calc(100vh - 88px);
-            }
-            
-            .form-card {
-                padding: 20px;
-                border-radius: 12px;
-            }
-            
-            .page-title {
-                font-size: 1.3rem;
-                margin-bottom: 20px;
-            }
-            
-            .form-group {
-                margin-bottom: 15px;
-            }
-            
-            .footer {
-                height: 28px;
-                padding: 4px 12px;
-                font-size: 0.65rem;
-            }
-        }
-
-        @media (max-width: 360px) {
-            body {
-                padding: 50px 0 26px 0;
-            }
-            
-            .header-container {
-                height: 50px;
-            }
-            
-            .content-wrapper {
-                padding: 10px 8px;
-                min-height: calc(100vh - 76px);
-            }
-            
-            .action-buttons {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        html, body {
-            height: 100%;
-            overflow-x: hidden;
         }
     </style>
 </head>
 <body>
-    <!-- Header - Fixed -->
+
     <div class="header-container">
         <img src="head.png" alt="Header" class="header-image" onerror="this.style.display='none'">
     </div>
 
-    <!-- Main Content -->
     <div class="content-wrapper">
         <div class="form-card">
-            <!-- Page Title -->
-            <h1 class="page-title">
-                <i class="fas fa-user-plus me-2"></i>Add New Member
-            </h1>
+            
+            <div class="page-header">
+                <button class="back-btn" onclick="window.location.href='admin.html'">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="page-title">Add New Member</h2>
+            </div>
 
-            <!-- Member Form -->
-            <form id="memberForm">
-                <!-- Full Name -->
-                <div class="form-group">
-                    <label class="form-label">Full Name *</label>
-                    <input type="text" class="form-control" id="fullName" required 
-                           placeholder="Enter full name">
+            <form id="addMemberForm">
+                <div class="mb-2">
+                    <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" class="form-control mb-0" id="fullName" required placeholder="Enter name">
+                    </div>
                 </div>
 
-                <!-- Email -->
-                <div class="form-group">
-                    <label class="form-label">Email Address *</label>
-                    <input type="email" class="form-control" id="email" required 
-                           placeholder="Enter email address">
+                <div class="mb-2">
+                    <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        <input type="tel" class="form-control mb-0" id="phone" required placeholder="10 digit mobile">
+                    </div>
                 </div>
 
-                <!-- Phone -->
-                <div class="form-group">
-                    <label class="form-label">Phone Number *</label>
-                    <input type="tel" class="form-control" id="phone" required 
-                           placeholder="Enter phone number">
+                <div class="mb-2">
+                    <label class="form-label">Email (Login ID) <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" class="form-control mb-0" id="email" required placeholder="user@example.com">
+                    </div>
                 </div>
 
-                <!-- Address -->
-                <div class="form-group">
-                    <label class="form-label">Address</label>
-                    <textarea class="form-control" id="address" rows="3" 
-                              placeholder="Enter address"></textarea>
+                <div class="mb-2">
+                    <label class="form-label">Password <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="text" class="form-control mb-0" id="password" required placeholder="Min 6 chars" value="123456">
+                    </div>
+                    <small class="text-muted" style="font-size: 0.7rem;">Default: 123456 (User can change later)</small>
                 </div>
 
-                <!-- Role -->
-                <div class="form-group">
-                    <label class="form-label">Role *</label>
-                    <select class="form-select" id="role" required>
-                        <option value="">Select Role</option>
-                        <option value="member">Member</option>
+                <div class="mb-2">
+                    <label class="form-label">Role</label>
+                    <select class="form-select" id="role">
+                        <option value="member" selected>Member</option>
                         <option value="admin">Admin</option>
                     </select>
                 </div>
 
-                <!-- Initial Investment -->
-                <div class="form-group">
-                    <label class="form-label">Initial Investment (₹)</label>
-                    <input type="number" class="form-control" id="initialInvestment" 
-                           placeholder="Enter initial investment amount" min="0" step="100">
+                <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    <textarea class="form-control" id="address" rows="2" placeholder="Short address..."></textarea>
                 </div>
 
-                <!-- Password -->
-                <div class="form-group">
-                    <label class="form-label">Initial Password *</label>
-                    <input type="text" class="form-control" id="password" required 
-                           placeholder="Enter initial password" value="123456">
-                    <small class="text-muted">Default password: 123456 (User can change later)</small>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="action-buttons">
-                    <button type="button" class="btn-action btn-cancel" onclick="goToAdmin()">
-                        <i class="fas fa-times"></i>
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn-action btn-save">
-                        <i class="fas fa-save"></i>
-                        Save Member
-                    </button>
-                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-user-plus me-2"></i> Create Member
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- Footer - Fixed -->
     <footer class="footer">
-        <div class="footer-text">
-            <p>Powered by VTSoft 2025</p>
-        </div>
+        <div class="footer-text">VTSoft 2025</div>
         <button id="themeToggle" class="theme-toggle-btn">🌞</button>
     </footer>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
-        // Firebase Configuration
+        // 1. Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A",
             authDomain: "unarv-33742.firebaseapp.com",
@@ -398,156 +255,112 @@
             appId: "1:682302871290:web:e0fb6742752bbeb6515b43"
         };
 
-        // Initialize Firebase
-        try {
+        // 2. Initialize Primary App (For Admin Authentication & DB Access)
+        if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
-            const auth = firebase.auth();
-            const db = firebase.firestore();
+        }
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
-            // DOM Elements
-            const memberForm = document.getElementById('memberForm');
-            const themeToggle = document.getElementById('themeToggle');
-
-            // Auth State Listener
-            auth.onAuthStateChanged((user) => {
-                if (user) {
-                    checkAdminRole(user.uid);
-                } else {
-                    window.location.href = 'login.html';
-                }
-            });
-
-            // Check Admin Role
-            async function checkAdminRole(userId) {
-                try {
-                    const userDoc = await db.collection('users').doc(userId).get();
-                    if (userDoc.exists) {
-                        const userData = userDoc.data();
-                        if (userData.role !== 'admin') {
-                            showError('അഡ്മിൻ ആക്സസ് മാത്രം!');
-                            window.location.href = 'index.html';
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error checking admin role:', error);
-                    showError('അഡ്മിൻ ആക്സസ് പരിശോധിക്കാനായില്ല');
+        // 3. Security Check: Ensure User is Admin
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                // Check if the current user is really an admin
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                if (!userDoc.exists || userDoc.data().role !== 'admin') {
+                    alert('Access Denied!');
+                    window.location.href = 'index.html';
                 }
             }
+        });
 
-            // Member Form Submission
-            memberForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
+        // 4. Handle Form Submit
+        document.getElementById('addMemberForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Get Form Values
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const role = document.getElementById('role').value;
+            const address = document.getElementById('address').value.trim();
+
+            // Validation
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters!');
+                return;
+            }
+
+            const btn = document.querySelector('.btn-submit');
+            const originalBtnText = btn.innerHTML;
+            
+            try {
+                // Show Loading
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+
+                // --- CRITICAL STEP: SECONDARY APP ---
+                // We create a secondary app instance to create the new user.
+                // This prevents the current Admin from being logged out.
+                const secondaryApp = firebase.initializeApp(firebaseConfig, "SecondaryApp");
                 
-                const fullName = document.getElementById('fullName').value.trim();
-                const email = document.getElementById('email').value.trim();
-                const phone = document.getElementById('phone').value.trim();
-                const address = document.getElementById('address').value.trim();
-                const role = document.getElementById('role').value;
-                const initialInvestment = parseFloat(document.getElementById('initialInvestment').value) || 0;
-                const password = document.getElementById('password').value;
+                // Create Auth User in Secondary App
+                const userCredential = await secondaryApp.auth().createUserWithEmailAndPassword(email, password);
+                const newUserId = userCredential.user.uid;
 
-                // Validation
-                if (!fullName || !email || !phone || !role || !password) {
-                    showError('എല്ലാ required fields പൂരിപ്പിക്കുക!');
-                    return;
-                }
+                // Logout from Secondary App & Delete it (Cleanup)
+                await secondaryApp.auth().signOut();
+                await secondaryApp.delete();
 
-                const submitBtn = memberForm.querySelector('button[type="submit"]');
-                submitBtn.classList.add('btn-loading');
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
-
-                try {
-                    // Create user in Firebase Auth
-                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                    const newUser = userCredential.user;
-
-                    // Save user data to Firestore
-                    await db.collection('users').doc(newUser.uid).set({
-                        name: fullName,
-                        email: email,
-                        phone: phone,
-                        address: address,
-                        role: role,
-                        status: 'active',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        createdBy: auth.currentUser.uid
-                    });
-
-                    // If initial investment is provided, save it
-                    if (initialInvestment > 0) {
-                        await db.collection('investments').add({
-                            userId: newUser.uid,
-                            amount: initialInvestment,
-                            type: 'initial',
-                            date: firebase.firestore.FieldValue.serverTimestamp(),
-                            description: 'Initial investment',
-                            createdBy: auth.currentUser.uid
-                        });
-                    }
-
-                    showSuccess(`മെമ്പർ ${fullName} വിജയകരമായി ചേർത്തു!`);
-                    memberForm.reset();
-
-                } catch (error) {
-                    let errorMessage = 'മെമ്പർ ചേർക്കാനായില്ല! ';
-                    
-                    switch (error.code) {
-                        case 'auth/email-already-in-use':
-                            errorMessage += 'ഈ ഇമെയിൽ ഇതിനകം ഉപയോഗത്തിലാണ്.';
-                            break;
-                        case 'auth/invalid-email':
-                            errorMessage += 'സാധുവല്ലാത്ത ഇമെയിൽ വിലാസം.';
-                            break;
-                        case 'auth/weak-password':
-                            errorMessage += 'പാസ്സ്വേഡ് വളരെ എളുപ്പമാണ്.';
-                            break;
-                        default:
-                            errorMessage += error.message;
-                    }
-                    
-                    showError(errorMessage);
-                } finally {
-                    submitBtn.classList.remove('btn-loading');
-                    submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Member';
-                }
-            });
-
-            // Go to Admin Panel
-            function goToAdmin() {
-                window.location.href = 'admin.html';
-            }
-
-            // Show Success Message
-            function showSuccess(message) {
-                alert('✅ ' + message);
-            }
-
-            // Show Error Message
-            function showError(message) {
-                alert('❌ ' + message);
-            }
-
-            // Theme Toggle
-            if (themeToggle) {
-                themeToggle.addEventListener('click', () => {
-                    const html = document.documentElement;
-                    const currentTheme = html.getAttribute('data-theme');
-                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                    html.setAttribute('data-theme', newTheme);
-                    localStorage.setItem('theme', newTheme);
-                    
-                    themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
+                // --- DATA SAVING ---
+                // Now use the PRIMARY 'db' (where Admin is logged in) to save details to Firestore
+                await db.collection('users').doc(newUserId).set({
+                    uid: newUserId,
+                    name: fullName,
+                    phone: phone,
+                    email: email,
+                    role: role,
+                    address: address,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'active'
                 });
 
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                document.documentElement.setAttribute('data-theme', savedTheme);
-                themeToggle.textContent = savedTheme === 'light' ? '🌞' : '🌙';
-            }
+                // Success
+                alert(`✅ Member Created Successfully!\nName: ${fullName}`);
+                document.getElementById('addMemberForm').reset();
+                document.getElementById('password').value = "123456"; // Reset default password
 
-        } catch (error) {
-            alert('Firebase initialization error: ' + error.message);
-            console.error('Firebase error:', error);
-        }
+            } catch (error) {
+                console.error("Error:", error);
+                let msg = error.message;
+                if(error.code === 'auth/email-already-in-use') {
+                    msg = "ഈ ഇമെയിൽ ഐഡിയിൽ മറ്റൊരു അക്കൗണ്ട് നിലവിലുണ്ട്.";
+                }
+                alert("❌ Failed: " + msg);
+            } finally {
+                // Restore Button
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+            }
+        });
+
+        // Theme Toggle Logic (Same as before)
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
+        });
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'light' ? '🌞' : '🌙';
+
     </script>
 </body>
 </html>
