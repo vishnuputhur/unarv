@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ml" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Edit Members</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF6B35;
+            --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #333;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        [data-theme="dark"] {
+            --card-bg: rgba(45, 45, 45, 0.95);
+            --text-color: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: var(--text-color);
+        }
+
+        /* Fixed Header */
+        .header-container {
+            height: 70px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 100;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .header-image { height: 100%; object-fit: contain; }
+
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--card-bg);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-orange);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        /* Content Area */
+        .content-wrapper {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .page-title {
+            color: white;
+            font-weight: 600;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Search & List */
+        .search-input {
+            width: 100%;
+            max-width: 450px;
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .members-list {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 50px;
+        }
+
+        .member-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .member-info { flex: 1; padding-left: 12px; }
+        .member-name { font-weight: 600; font-size: 1rem; color: var(--text-color); }
+        .member-details { font-size: 0.8rem; color: #666; }
+
+        .edit-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .edit-btn:active { transform: scale(0.9); }
+
+        /* Badges */
+        .badge-class-a { background-color: #10b981; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-right: 5px;}
+        .badge-class-b { background-color: #3b82f6; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-right: 5px;}
+        .badge-admin { background-color: #f59e0b; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; }
+
+        /* Footer */
+        .footer {
+            height: 40px;
+            flex-shrink: 0;
+            background: var(--card-bg);
+            border-top: 2px solid rgba(255, 107, 53, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 0.75rem;
+        }
+
+        /* Modal Customization */
+        .modal-content { background: var(--card-bg); border-radius: 15px; }
+        .modal-header { border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .modal-title { color: var(--primary-orange); font-weight: 600; }
+        .form-label { font-size: 0.9rem; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <button onclick="window.location.href='admin.html'" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <img src="head.png" alt="Header" class="header-image" onerror="this.style.display='none'">
+    </header>
+
+    <main class="content-wrapper">
+        <h1 class="page-title"><i class="fas fa-users-cog me-2"></i>Edit Members</h1>
+        
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search to edit...">
+
+        <div class="members-list" id="membersList">
+            <div class="text-center text-white mt-4">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                <p>Loading members...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div>Powered by VTSoft 2025</div>
+        <button id="themeToggle" style="background:none; border:none; cursor:pointer;">🌞</button>
+    </footer>
+
+    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Member Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <input type="hidden" id="editUserId">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="editName" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="editPhone" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Member Class</label>
+                            <select class="form-select" id="editClass">
+                                <option value="A">Class A (Default)</option>
+                                <option value="B">Class B</option>
+                            </select>
+                            <small class="text-muted">Class A members have standard privileges.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Role / Access Level</label>
+                            <select class="form-select" id="editRole">
+                                <option value="member">Member (Regular)</option>
+                                <option value="admin">Admin (Full Access)</option>
+                            </select>
+                            <small class="text-danger" id="adminWarning" style="display:none;">⚠️ Warning: This will give full control to this user!</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea class="form-control" id="editAddress" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" style="background: var(--gradient); border:none;" onclick="saveChanges()">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A",
+            authDomain: "unarv-33742.firebaseapp.com",
+            projectId: "unarv-33742",
+            storageBucket: "unarv-33742.firebasestorage.app",
+            messagingSenderId: "682302871290",
+            appId: "1:682302871290:web:e0fb6742752bbeb6515b43"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        let editModal; // To control the modal
+        let allMembers = []; // Store data for searching
+
+        // Auth Check
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                checkAdmin(user.uid);
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Ensure current user is Admin
+        async function checkAdmin(uid) {
+            const doc = await db.collection('users').doc(uid).get();
+            if (doc.exists && doc.data().role === 'admin') {
+                loadMembers();
+                editModal = new bootstrap.Modal(document.getElementById('editModal'));
+            } else {
+                alert('Access Denied');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Load Members
+        async function loadMembers() {
+            try {
+                const snapshot = await db.collection('users').orderBy('name').get();
+                allMembers = [];
+                snapshot.forEach(doc => {
+                    allMembers.push({ id: doc.id, ...doc.data() });
+                });
+                renderList(allMembers);
+            } catch (error) {
+                console.error("Error loading members:", error);
+            }
+        }
+
+        // Render List
+        function renderList(members) {
+            const listEl = document.getElementById('membersList');
+            if (members.length === 0) {
+                listEl.innerHTML = `<div class="text-center text-white">No members found</div>`;
+                return;
+            }
+
+            listEl.innerHTML = members.map(m => {
+                const memberClass = m.memberClass || 'A'; // Default to A
+                const role = m.role || 'member';
+                const classBadge = memberClass === 'A' 
+                    ? `<span class="badge-class-a">Class A</span>` 
+                    : `<span class="badge-class-b">Class B</span>`;
+                
+                const adminBadge = role === 'admin' 
+                    ? `<span class="badge-admin">Admin</span>` 
+                    : ``;
+
+                return `
+                <div class="member-card">
+                    <div class="d-flex align-items-center" style="flex:1">
+                        <div style="width:40px; height:40px; background:#eee; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#555;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="member-info">
+                            <div class="member-name">${m.name}</div>
+                            <div class="member-details">
+                                ${classBadge} ${adminBadge} <br>
+                                <i class="fas fa-phone-alt" style="font-size:0.7rem;"></i> ${m.phone}
+                            </div>
+                        </div>
+                    </div>
+                    <button class="edit-btn" onclick="openEdit('${m.id}')">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Open Edit Modal
+        window.openEdit = function(id) {
+            const member = allMembers.find(m => m.id === id);
+            if (!member) return;
+
+            document.getElementById('editUserId').value = id;
+            document.getElementById('editName').value = member.name || '';
+            document.getElementById('editPhone').value = member.phone || '';
+            document.getElementById('editAddress').value = member.address || '';
+            
+            // Set Class (Default to A if not set)
+            document.getElementById('editClass').value = member.memberClass || 'A';
+            
+            // Set Role
+            document.getElementById('editRole').value = member.role || 'member';
+            toggleAdminWarning();
+
+            editModal.show();
+        };
+
+        // Show warning when Admin is selected
+        document.getElementById('editRole').addEventListener('change', toggleAdminWarning);
+        
+        function toggleAdminWarning() {
+            const role = document.getElementById('editRole').value;
+            const warning = document.getElementById('adminWarning');
+            warning.style.display = role === 'admin' ? 'block' : 'none';
+        }
+
+        // Save Changes
+        window.saveChanges = async function() {
+            const id = document.getElementById('editUserId').value;
+            const btn = document.querySelector('.modal-footer .btn-primary');
+            
+            const newData = {
+                name: document.getElementById('editName').value,
+                phone: document.getElementById('editPhone').value,
+                address: document.getElementById('editAddress').value,
+                memberClass: document.getElementById('editClass').value,
+                role: document.getElementById('editRole').value
+            };
+
+            try {
+                btn.innerHTML = 'Saving...';
+                btn.disabled = true;
+
+                await db.collection('users').doc(id).update(newData);
+                
+                alert('✅ Member details updated successfully!');
+                editModal.hide();
+                loadMembers(); // Refresh list
+
+            } catch (error) {
+                alert('Error updating: ' + error.message);
+            } finally {
+                btn.innerHTML = 'Save Changes';
+                btn.disabled = false;
+            }
+        };
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allMembers.filter(m => m.name.toLowerCase().includes(term));
+            renderList(filtered);
+        });
+
+        // Theme Toggle (Same as other pages)
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
+        });
+
+    </script>
+</body>
+</html>
