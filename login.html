@@ -37,12 +37,13 @@
             padding-bottom: 50px; /* Footer height */
         }
 
-        /* Fixed Header - Perfect for 1313x199 image */
+        /* Fixed Header with 5mm side gaps */
         .header-container {
             position: relative;
             width: 100%;
-            height: 120px; /* Fixed height for mobile */
+            height: 120px;
             overflow: hidden;
+            padding: 0 5mm; /* 5mm gap on left and right */
         }
 
         .header-image {
@@ -51,12 +52,12 @@
             object-fit: cover;
             object-position: center;
             display: block;
+            border-radius: 0 0 15px 15px; /* Rounded bottom corners */
         }
 
         /* 15mm gap after header */
         .content-wrapper {
-            padding-top: 15mm; /* 15mm gap after header */
-            padding: 15mm 15px 20px 15px;
+            padding: 15mm 5mm 20px 5mm; /* 15mm top, 5mm sides */
         }
 
         /* Login Card */
@@ -153,7 +154,7 @@
             text-decoration: underline;
         }
 
-        /* Fixed Footer - Always at bottom */
+        /* Fixed Footer - Always at bottom with side gaps */
         .footer {
             position: fixed;
             bottom: 0;
@@ -168,7 +169,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
+            padding: 10px 5mm; /* 5mm side gaps */
             height: 50px;
         }
 
@@ -215,10 +216,11 @@
         @media (max-width: 768px) {
             .header-container {
                 height: 100px;
+                padding: 0 4mm;
             }
             
             .content-wrapper {
-                padding: 12mm 10px 20px 10px;
+                padding: 12mm 4mm 20px 4mm;
             }
             
             .login-card {
@@ -229,15 +231,20 @@
                 font-size: 1.3rem;
                 margin-bottom: 20px;
             }
+            
+            .footer {
+                padding: 10px 4mm;
+            }
         }
 
         @media (max-width: 576px) {
             .header-container {
                 height: 80px;
+                padding: 0 3mm;
             }
             
             .content-wrapper {
-                padding: 10mm 8px 20px 8px;
+                padding: 10mm 3mm 20px 3mm;
             }
             
             .login-card {
@@ -260,7 +267,7 @@
             }
             
             .footer {
-                padding: 8px 15px;
+                padding: 8px 3mm;
                 height: 45px;
                 font-size: 0.75rem;
             }
@@ -269,10 +276,11 @@
         @media (max-width: 400px) {
             .header-container {
                 height: 70px;
+                padding: 0 2mm;
             }
             
             .content-wrapper {
-                padding: 8mm 5px 20px 5px;
+                padding: 8mm 2mm 20px 2mm;
             }
             
             .login-card {
@@ -282,16 +290,21 @@
             .login-title {
                 font-size: 1.1rem;
             }
+            
+            .footer {
+                padding: 8px 2mm;
+            }
         }
 
         /* Extra small devices */
         @media (max-width: 360px) {
             .header-container {
                 height: 60px;
+                padding: 0 2mm;
             }
             
             .content-wrapper {
-                padding: 6mm 5px 20px 5px;
+                padding: 6mm 2mm 20px 2mm;
             }
         }
 
@@ -302,12 +315,12 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header with 5mm side gaps -->
     <div class="header-container">
         <img src="head.png" alt="Header" class="header-image">
     </div>
 
-    <!-- Main Content with 15mm gap -->
+    <!-- Main Content with 15mm top gap and 5mm side gaps -->
     <div class="content-wrapper">
         <div class="login-card">
             <h2 class="login-title">Login</h2>
@@ -347,7 +360,7 @@
         </div>
     </div>
 
-    <!-- Fixed Footer - Always at bottom -->
+    <!-- Fixed Footer with 5mm side gaps -->
     <footer class="footer">
         <div class="footer-text">
             <p>Powered by VTSoft 2025</p>
