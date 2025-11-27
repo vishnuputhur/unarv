@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ml" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Add Subscription</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF6B35;
+            --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #333;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        [data-theme="dark"] {
+            --card-bg: rgba(45, 45, 45, 0.95);
+            --text-color: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: var(--text-color);
+            padding-top: 80px; 
+            padding-bottom: 60px;
+        }
+
+        /* Fixed Header */
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-image { height: 50px; width: auto; object-fit: contain; }
+
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--card-bg);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-orange);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Content */
+        .content-wrapper {
+            width: 100%;
+            padding: 0 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .page-title {
+            color: white;
+            font-weight: 600;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Member Search */
+        .search-container {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            outline: none;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            display: none;
+        }
+
+        .search-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+        }
+        .search-item:hover { background: rgba(0,0,0,0.05); }
+
+        /* Payment Card */
+        .payment-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none; /* Hidden until user selected */
+            margin-bottom: 20px;
+        }
+
+        .selected-user {
+            background: var(--gradient);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .btn-pay {
+            background: var(--gradient);
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(255, 107, 53, 0.3);
+        }
+
+        /* History List */
+        .history-list {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 10px;
+        }
+
+        .history-item {
+            background: rgba(255,255,255,0.9);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #10b981;
+        }
+        [data-theme="dark"] .history-item { background: rgba(50,50,50,0.9); color: white; }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: var(--card-bg);
+            border-top: 2px solid rgba(255, 107, 53, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 0.75rem;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <button id="backBtn" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <img src="head.png" alt="Header" class="header-image" onerror="this.style.display='none'">
+    </header>
+
+    <main class="content-wrapper">
+        <h1 class="page-title"><i class="fas fa-calendar-check me-2"></i>Weekly Subscription</h1>
+
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search Member Name...">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <div class="payment-card" id="paymentCard">
+            <div class="selected-user">
+                <i class="fas fa-user-circle me-2"></i>
+                <span id="selectedUserName">User Name</span>
+            </div>
+            
+            <form id="subscriptionForm">
+                <input type="hidden" id="selectedUserId">
+                
+                <div class="mb-3">
+                    <label class="form-label" style="font-weight:500;">Week Date (Monday)</label>
+                    <input type="date" class="form-control" id="payDate" required>
+                    <small id="dateWarning" class="text-danger" style="display:none; font-size:0.75rem;">
+                        <i class="fas fa-exclamation-circle"></i> Warning: This is not a Monday!
+                    </small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" style="font-weight:500;">Amount (₹)</label>
+                    <input type="number" class="form-control" id="payAmount" placeholder="Enter amount" required>
+                </div>
+
+                <button type="submit" class="btn-pay">
+                    Add Payment
+                </button>
+            </form>
+        </div>
+
+        <h6 style="color:white; margin-top:20px; align-self:flex-start; max-width:500px; width:100%;">Recent Payments</h6>
+        <div class="history-list" id="historyList">
+            </div>
+
+    </main>
+
+    <footer class="footer">
+        <div>Powered by VTSoft 2025</div>
+        <button id="themeToggle" style="background:none; border:none; cursor:pointer;">🌞</button>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        document.getElementById('backBtn').addEventListener('click', () => window.location.href = 'admin.html');
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A",
+            authDomain: "unarv-33742.firebaseapp.com",
+            projectId: "unarv-33742",
+            storageBucket: "unarv-33742.firebasestorage.app",
+            messagingSenderId: "682302871290",
+            appId: "1:682302871290:web:e0fb6742752bbeb6515b43"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        let allMembers = [];
+
+        // 1. Set Default Date to Last Monday
+        function setLastMonday() {
+            const d = new Date();
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day == 0 ? -6 : 1); // Adjust when day is Sunday
+            const monday = new Date(d.setDate(diff));
+            document.getElementById('payDate').valueAsDate = monday;
+        }
+        setLastMonday();
+
+        // 2. Load Members for Search
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                loadMembers();
+                loadRecentHistory();
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        async function loadMembers() {
+            const snap = await db.collection('users').get();
+            allMembers = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        }
+
+        // 3. Search Logic
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            if (term.length < 1) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            const filtered = allMembers.filter(m => m.name.toLowerCase().includes(term));
+            
+            if (filtered.length > 0) {
+                searchResults.innerHTML = filtered.map(m => `
+                    <div class="search-item" onclick="selectMember('${m.id}', '${m.name}')">
+                        <span>${m.name}</span>
+                        <small class="text-muted">${m.phone}</small>
+                    </div>
+                `).join('');
+                searchResults.style.display = 'block';
+            } else {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // 4. Select Member
+        window.selectMember = function(id, name) {
+            document.getElementById('selectedUserId').value = id;
+            document.getElementById('selectedUserName').innerText = name;
+            document.getElementById('paymentCard').style.display = 'block';
+            searchResults.style.display = 'none';
+            searchInput.value = ''; // Clear search
+        };
+
+        // 5. Date Validation (Check if Monday)
+        document.getElementById('payDate').addEventListener('change', function() {
+            const date = new Date(this.value);
+            const day = date.getDay(); // 0=Sun, 1=Mon...
+            const warning = document.getElementById('dateWarning');
+            
+            if (day !== 1) { // If not Monday
+                warning.style.display = 'block';
+            } else {
+                warning.style.display = 'none';
+            }
+        });
+
+        // 6. Submit Payment
+        document.getElementById('subscriptionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.querySelector('.btn-pay');
+            btn.innerHTML = 'Processing...';
+            btn.disabled = true;
+
+            const userId = document.getElementById('selectedUserId').value;
+            const userName = document.getElementById('selectedUserName').innerText;
+            const date = document.getElementById('payDate').value;
+            const amount = parseFloat(document.getElementById('payAmount').value);
+
+            try {
+                // Add to 'subscriptions' collection
+                await db.collection('subscriptions').add({
+                    userId: userId,
+                    userName: userName,
+                    date: date, // The Monday date
+                    amount: amount,
+                    paidAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: 'paid',
+                    type: 'weekly'
+                });
+
+                alert(`✅ Payment Added for ${userName}`);
+                
+                // Refresh History
+                loadRecentHistory();
+
+                // Keep the date same (usually adding for multiple people same week), clear amount
+                document.getElementById('payAmount').value = '';
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                btn.innerHTML = 'Add Payment';
+                btn.disabled = false;
+            }
+        });
+
+        // 7. Load Recent History
+        function loadRecentHistory() {
+            db.collection('subscriptions')
+                .orderBy('paidAt', 'desc')
+                .limit(10)
+                .get()
+                .then(snap => {
+                    const list = document.getElementById('historyList');
+                    list.innerHTML = snap.docs.map(doc => {
+                        const d = doc.data();
+                        return `
+                        <div class="history-item">
+                            <div>
+                                <div style="font-weight:600; font-size:0.9rem;">${d.userName}</div>
+                                <div style="font-size:0.75rem; color:#666;">For Week: ${d.date}</div>
+                            </div>
+                            <div style="font-weight:700; color:#10b981;">₹${d.amount}</div>
+                        </div>
+                        `;
+                    }).join('');
+                });
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
+        });
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+    </script>
+</body>
+</html>
