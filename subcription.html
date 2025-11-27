@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ml" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Subscription</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF6B35;
+            --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #333;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        [data-theme="dark"] {
+            --card-bg: rgba(45, 45, 45, 0.95);
+            --text-color: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: var(--text-color);
+            padding-top: 80px; /* Space for Header */
+            padding-bottom: 60px; /* Space for Footer */
+        }
+
+        /* Fixed Header (No Back Button) */
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-image { height: 50px; width: auto; object-fit: contain; }
+
+        /* Scrollable Content */
+        .content-wrapper {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 0 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .page-title {
+            color: white;
+            font-weight: 600;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        /* Summary Card */
+        .summary-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .total-label { font-size: 0.9rem; color: #888; margin-bottom: 5px; }
+        .total-amount { font-size: 2rem; font-weight: 700; color: var(--primary-orange); margin-bottom: 15px; }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .status-ok { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
+        .status-due { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid var(--danger); }
+
+        /* History List */
+        .history-section {
+            width: 100%;
+            max-width: 500px;
+        }
+        .section-title { color: white; margin-bottom: 10px; font-size: 1rem; font-weight: 500; }
+
+        .history-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--success);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .item-date { font-weight: 600; font-size: 0.95rem; display: block; }
+        .item-time { font-size: 0.75rem; color: #888; }
+        .item-amount { font-weight: 700; font-size: 1.1rem; color: var(--success); }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px; /* Slightly taller for home nav */
+            background: var(--card-bg);
+            border-top: 2px solid rgba(255, 107, 53, 0.3);
+            display: flex;
+            justify-content: space-around; /* Distribute items */
+            align-items: center;
+            padding: 0 15px;
+            z-index: 1000;
+        }
+
+        .nav-icon { font-size: 1.2rem; color: #888; cursor: pointer; transition: 0.3s; }
+        .nav-icon.active { color: var(--primary-orange); }
+        .nav-icon:hover { color: var(--primary-orange); transform: scale(1.1); }
+
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <img src="head.png" alt="Header" class="header-image" onerror="this.style.display='none'">
+    </header>
+
+    <main class="content-wrapper">
+        <h1 class="page-title">Subscription History</h1>
+
+        <div class="summary-card">
+            <div class="total-label">Total Amount Paid</div>
+            <div class="total-amount" id="totalPaid">₹0</div>
+            
+            <div id="statusContainer">
+                <span class="status-badge status-ok">
+                    <i class="fas fa-spinner fa-spin me-1"></i> Checking status...
+                </span>
+            </div>
+            <div style="font-size: 0.8rem; margin-top: 10px; color: #666;" id="lastPaidText">
+                Last Payment: -
+            </div>
+        </div>
+
+        <div class="history-section">
+            <div class="section-title">Payment History</div>
+            <div id="historyList">
+                <div class="text-center text-white mt-3">
+                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <i class="fas fa-home nav-icon" onclick="window.location.href='index.html'"></i>
+        <div style="font-size:0.7rem; font-weight:500;">VTSoft 2025</div>
+        <button id="themeToggle" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌞</button>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A",
+            authDomain: "unarv-33742.firebaseapp.com",
+            projectId: "unarv-33742",
+            storageBucket: "unarv-33742.firebasestorage.app",
+            messagingSenderId: "682302871290",
+            appId: "1:682302871290:web:e0fb6742752bbeb6515b43"
+        };
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const db = firebase.firestore();
+
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    loadSubscriptionData(user.uid);
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+
+            async function loadSubscriptionData(uid) {
+                try {
+                    // Fetch Subscriptions for current user
+                    const snap = await db.collection('subscriptions')
+                        .where('userId', '==', uid)
+                        .orderBy('date', 'desc') // Sort by date (Most recent first)
+                        .get();
+
+                    const listEl = document.getElementById('historyList');
+                    let total = 0;
+                    let lastDate = null;
+                    let html = '';
+
+                    if (snap.empty) {
+                        listEl.innerHTML = '<div class="text-center text-white" style="opacity:0.7">No subscription history found.</div>';
+                        document.getElementById('statusContainer').innerHTML = `
+                            <span class="status-badge status-due">No Payments Yet</span>
+                        `;
+                        return;
+                    }
+
+                    // Process Data
+                    snap.forEach(doc => {
+                        const data = doc.data();
+                        total += (parseFloat(data.amount) || 0);
+
+                        // Capture the most recent date
+                        if (!lastDate) lastDate = data.date;
+
+                        // Create List Item
+                        html += `
+                        <div class="history-item">
+                            <div>
+                                <span class="item-date">
+                                    <i class="far fa-calendar-alt me-2"></i>${formatDate(data.date)}
+                                </span>
+                                <span class="item-time">Paid on: ${data.paidAt ? new Date(data.paidAt.seconds * 1000).toLocaleDateString() : '-'}</span>
+                            </div>
+                            <div class="item-amount">+ ₹${data.amount}</div>
+                        </div>
+                        `;
+                    });
+
+                    // Update UI
+                    document.getElementById('totalPaid').innerText = `₹${total.toLocaleString()}`;
+                    listEl.innerHTML = html;
+                    document.getElementById('lastPaidText').innerText = `Last Payment: ${formatDate(lastDate)}`;
+
+                    // Calculate Due Status (Logic: Weeks since last payment)
+                    calculateDueStatus(lastDate);
+
+                } catch (error) {
+                    console.error("Error:", error);
+                    document.getElementById('historyList').innerHTML = '<div class="text-center text-white">Error loading data.</div>';
+                }
+            }
+
+            // Simple Date Formatter (YYYY-MM-DD to DD/MM/YYYY)
+            function formatDate(dateStr) {
+                if (!dateStr) return '-';
+                const parts = dateStr.split('-');
+                if(parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                return dateStr;
+            }
+
+            // Due Calculation Logic
+            function calculateDueStatus(lastPaymentDateStr) {
+                if (!lastPaymentDateStr) return;
+
+                const lastDate = new Date(lastPaymentDateStr);
+                const today = new Date();
+                
+                // Difference in time
+                const diffTime = Math.abs(today - lastDate);
+                // Difference in days
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                // Weeks passed
+                const weeksPassed = Math.floor(diffDays / 7);
+
+                const statusEl = document.getElementById('statusContainer');
+
+                if (weeksPassed <= 1) {
+                    // Paid recently (less than a week ago)
+                    statusEl.innerHTML = `<span class="status-badge status-ok"><i class="fas fa-check-circle me-1"></i> Up to Date</span>`;
+                } else {
+                    // Missed some weeks
+                    // Subtract 1 because "this week" isn't necessarily due yet until the week ends
+                    const dueWeeks = weeksPassed; 
+                    statusEl.innerHTML = `
+                        <span class="status-badge status-due">
+                            <i class="fas fa-exclamation-triangle me-1"></i> ${dueWeeks} Weeks Pending
+                        </span>`;
+                }
+            }
+
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.addEventListener('click', () => {
+                const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
+            });
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            themeToggle.textContent = savedTheme === 'light' ? '🌞' : '🌙';
+
+        } catch (error) {
+            alert(error.message);
+        }
+    </script>
+</body>
+</html>
