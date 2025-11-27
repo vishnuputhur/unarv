@@ -10,7 +10,6 @@
     <style>
         :root {
             --primary-orange: #FF6B35;
-            --orange-light: #FF8C42;
             --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
             --card-bg: rgba(255, 255, 255, 0.95);
             --text-color: #333;
@@ -25,39 +24,38 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* --- FIXED LAYOUT STRUCTURE --- */
         body {
             font-family: 'Poppins', sans-serif;
             background: var(--bg-gradient);
-            height: 100vh; /* Full viewport height */
-            width: 100vw;
-            display: flex;       /* Use Flexbox */
-            flex-direction: column; /* Stack vertically */
-            overflow: hidden;    /* Prevent body scroll */
+            min-height: 100vh;
             color: var(--text-color);
+            /* Important: Add padding so content doesn't hide behind fixed header/footer */
+            padding-top: 80px; 
+            padding-bottom: 60px;
         }
 
-        /* 1. Header (Fixed at Top) */
+        /* --- 1. FIXED HEADER --- */
         .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 70px;
-            flex-shrink: 0; /* Don't shrink */
+            background: rgba(255, 255, 255, 0.1); /* Slight transparency */
+            backdrop-filter: blur(10px); /* Glass effect */
             display: flex;
             justify-content: center;
             align-items: center;
-            background: rgba(0,0,0,0.1); /* Slight overlay */
-            padding: 5px;
-            position: relative;
-            z-index: 100;
+            z-index: 1000; /* Stay on top */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .header-image {
-            height: 100%;
+            height: 50px; /* Reduced slightly to fit */
             width: auto;
-            max-width: 100%;
             object-fit: contain;
         }
 
-        /* Back Button (Positioned inside header area) */
         .back-btn {
             position: absolute;
             left: 15px;
@@ -74,51 +72,30 @@
             color: var(--primary-orange);
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             cursor: pointer;
-            z-index: 101;
+            z-index: 1001;
         }
 
-        /* 2. Main Content (Scrollable Area) */
+        /* --- 2. CONTENT AREA --- */
         .content-wrapper {
-            flex-grow: 1; /* Take remaining space */
-            overflow-y: auto; /* Allow scrolling inside this only */
-            padding: 20px 15px;
+            width: 100%;
+            padding: 0 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
         }
 
-        /* 3. Footer (Fixed at Bottom) */
-        .footer {
-            height: 40px;
-            flex-shrink: 0; /* Don't shrink */
-            background: var(--card-bg);
-            border-top: 2px solid rgba(255, 107, 53, 0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 15px;
-            font-size: 0.75rem;
-            z-index: 100;
-        }
-
-        /* --- CONTENT STYLES --- */
         .page-title {
             color: white;
             font-weight: 600;
             font-size: 1.4rem;
             margin-bottom: 20px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            text-align: center;
         }
 
         .search-box {
             width: 100%;
             max-width: 450px;
             margin-bottom: 20px;
-            position: sticky; /* Keeps search visible when scrolling content */
-            top: 0;
-            z-index: 10;
         }
 
         .search-input {
@@ -137,7 +114,6 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            padding-bottom: 20px;
         }
 
         .member-card {
@@ -145,12 +121,6 @@
             border-radius: 15px;
             padding: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .member-header {
@@ -174,40 +144,34 @@
             font-size: 1.2rem;
         }
 
-        .member-name {
-            font-weight: 600;
-            font-size: 1.05rem;
-            color: var(--text-color);
-        }
+        .member-name { font-weight: 600; font-size: 1.05rem; }
+        .member-role { font-size: 0.75rem; background: #eee; padding: 2px 8px; border-radius: 10px; color: #555; }
 
-        .member-role {
-            font-size: 0.75rem;
-            background: #eee;
-            padding: 2px 8px;
-            border-radius: 10px;
-            color: #555;
-        }
-
-        .loan-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .stat-box {
-            background: rgba(0,0,0,0.03);
-            padding: 8px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
+        .loan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-box { background: rgba(0,0,0,0.03); padding: 8px; border-radius: 8px; text-align: center; }
         .stat-label { font-size: 0.7rem; color: #888; }
-        .stat-val { font-weight: 700; font-size: 0.9rem; color: var(--text-color); }
+        .stat-val { font-weight: 700; font-size: 0.9rem; }
+        
         .text-danger { color: #ef4444 !important; }
         .text-success { color: #22c55e !important; }
 
-        .loading-spinner { text-align: center; color: white; margin-top: 50px; }
-
+        /* --- 3. FIXED FOOTER --- */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: var(--card-bg);
+            border-top: 2px solid rgba(255, 107, 53, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 0.75rem;
+            z-index: 1000; /* Stay on top */
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
     </style>
 </head>
 <body>
@@ -227,9 +191,9 @@
         </div>
 
         <div class="members-list" id="membersList">
-            <div class="loading-spinner">
+            <div style="text-align: center; color: white; margin-top: 20px;">
                 <i class="fas fa-spinner fa-spin fa-2x"></i>
-                <p class="mt-2">Loading members data...</p>
+                <p class="mt-2">Connecting to database...</p>
             </div>
         </div>
     </main>
@@ -244,14 +208,11 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
-        // --- Navigation Logic (Fixed Scope Issue) ---
+        // Back Button
         document.getElementById('backBtn').addEventListener('click', () => {
-            // ഉപയോക്താവ് അഡ്മിൻ ആണോ എന്ന് നോക്കി അഡ്മിൻ പേജിലേക്കോ ഹോമിലേക്കോ വിടാം
-            // ഇപ്പോൾ ലളിതമായി ഹോമിലേക്ക് വിടുന്നു.
-            window.location.href = 'index.html'; 
+            window.location.href = 'index.html';
         });
 
-        // --- Firebase Logic ---
         const firebaseConfig = {
             apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A",
             authDomain: "unarv-33742.firebaseapp.com",
@@ -265,87 +226,103 @@
             firebase.initializeApp(firebaseConfig);
             const auth = firebase.auth();
             const db = firebase.firestore();
-
             const membersListEl = document.getElementById('membersList');
-            const searchInput = document.getElementById('searchInput');
 
-            // Auth Check
             auth.onAuthStateChanged((user) => {
                 if (user) {
+                    // Start Loading
                     loadMembers();
                 } else {
                     window.location.href = 'login.html';
                 }
             });
 
-            // Load Data
             async function loadMembers() {
                 try {
-                    // Get Users
+                    console.log("Starting to fetch members...");
+                    
+                    // 1. Fetch Users
                     const usersSnap = await db.collection('users').get();
+                    
+                    if (usersSnap.empty) {
+                        membersListEl.innerHTML = `<div class="text-center text-white">No members found in 'users' collection.</div>`;
+                        return;
+                    }
+
                     let membersData = [];
 
-                    // Loop through users and fetch their loan details
-                    // Note: This might be slow if there are many users. 
-                    for (const doc of usersSnap.docs) {
+                    // 2. Loop through users
+                    // NOTE: Using Promise.all for faster loading instead of loop with await
+                    const promises = usersSnap.docs.map(async (doc) => {
                         const user = doc.data();
                         const uid = doc.id;
-
-                        // Skip fetching financial data if simple member list is enough,
-                        // but since you asked for balances:
+                        
                         let totalLoan = 0;
                         let balance = 0;
                         let pendingDues = 0;
 
-                        // Fetch Active Loans
-                        const loansSnap = await db.collection('loans')
-                            .where('userId', '==', uid)
-                            .where('status', '==', 'active')
-                            .get();
-                        
-                        loansSnap.forEach(l => {
-                            totalLoan += parseFloat(l.data().amount) || 0;
-                            balance += parseFloat(l.data().balance) || 0;
-                        });
+                        try {
+                            // Fetch Loans
+                            const loansSnap = await db.collection('loans')
+                                .where('userId', '==', uid) // Ensure 'userId' field exists in loans
+                                .where('status', '==', 'active')
+                                .get();
+                            
+                            loansSnap.forEach(l => {
+                                totalLoan += parseFloat(l.data().amount) || 0;
+                                balance += parseFloat(l.data().balance) || 0;
+                            });
 
-                        // Fetch Pending Payments
-                        const duesSnap = await db.collection('payments')
-                            .where('userId', '==', uid)
-                            .where('status', '==', 'pending')
-                            .get();
-                        pendingDues = duesSnap.size;
+                            // Fetch Dues
+                            const duesSnap = await db.collection('payments')
+                                .where('userId', '==', uid)
+                                .where('status', '==', 'pending')
+                                .get();
+                            pendingDues = duesSnap.size;
+                        } catch (err) {
+                            console.error("Error fetching financial data for user " + uid, err);
+                            // Continue even if financial data fails
+                        }
 
-                        membersData.push({
+                        return {
                             ...user,
                             id: uid,
                             totalLoan,
                             balance,
                             pendingDues
-                        });
-                    }
+                        };
+                    });
 
+                    membersData = await Promise.all(promises);
                     renderMembers(membersData);
 
-                    // Search Functionality
-                    searchInput.addEventListener('input', (e) => {
+                    // Search Logic
+                    document.getElementById('searchInput').addEventListener('input', (e) => {
                         const term = e.target.value.toLowerCase();
                         const filtered = membersData.filter(m => 
-                            (m.name && m.name.toLowerCase().includes(term)) || 
-                            (m.email && m.email.toLowerCase().includes(term))
+                            (m.name && m.name.toLowerCase().includes(term))
                         );
                         renderMembers(filtered);
                     });
 
                 } catch (error) {
-                    console.error("Error:", error);
-                    membersListEl.innerHTML = `<div class="text-center text-white">Error loading data.</div>`;
+                    console.error("Main Error:", error);
+                    let msg = "Error loading data.";
+                    if (error.code === 'permission-denied') {
+                        msg = "Permission Denied! Check Firestore Rules.";
+                    }
+                    membersListEl.innerHTML = `
+                        <div class="text-center text-white">
+                            <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                            <p>${msg}</p>
+                            <small>${error.message}</small>
+                        </div>`;
                 }
             }
 
-            // Render HTML
             function renderMembers(data) {
                 if (data.length === 0) {
-                    membersListEl.innerHTML = `<div class="text-center text-white">No members found.</div>`;
+                    membersListEl.innerHTML = `<div class="text-center text-white">No members match search.</div>`;
                     return;
                 }
 
@@ -356,24 +333,24 @@
                                 <i class="fas fa-user"></i>
                             </div>
                             <div style="flex:1">
-                                <div class="member-name">${m.name || 'No Name'}</div>
+                                <div class="member-name">${m.name || 'Unknown'}</div>
                                 <span class="member-role">${m.role || 'Member'}</span>
                             </div>
                             ${m.pendingDues > 0 
-                                ? `<span class="badge bg-danger">${m.pendingDues} Dues</span>` 
-                                : `<span class="badge bg-success"><i class="fas fa-check"></i></span>`
+                                ? `<span class="badge bg-danger">${m.pendingDues} Due</span>` 
+                                : `<span class="badge bg-success">Ok</span>`
                             }
                         </div>
                         
                         <div class="loan-grid">
                             <div class="stat-box">
                                 <div class="stat-label">Total Loan</div>
-                                <div class="stat-val">₹${m.totalLoan.toLocaleString()}</div>
+                                <div class="stat-val">₹${(m.totalLoan || 0).toLocaleString()}</div>
                             </div>
                             <div class="stat-box">
                                 <div class="stat-label">Balance</div>
-                                <div class="stat-val ${m.balance > 0 ? 'text-danger' : 'text-success'}">
-                                    ₹${m.balance.toLocaleString()}
+                                <div class="stat-val ${(m.balance || 0) > 0 ? 'text-danger' : 'text-success'}">
+                                    ₹${(m.balance || 0).toLocaleString()}
                                 </div>
                             </div>
                         </div>
@@ -390,14 +367,12 @@
                 localStorage.setItem('theme', newTheme);
                 themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
             });
-
-            // Load Saved Theme
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
             themeToggle.textContent = savedTheme === 'light' ? '🌞' : '🌙';
 
         } catch (error) {
-            alert("Firebase Error: " + error.message);
+            alert("Firebase Init Error: " + error.message);
         }
     </script>
 </body>
