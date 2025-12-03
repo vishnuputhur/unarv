@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ml" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Loans</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary-orange: #FF6B35; --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-gradient); min-height: 100vh; padding-top: 120px; padding-bottom: 60px; }
+        
+        /* Sticky Header */
+        .top-controls {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: white; padding: 15px; z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Loan List */
+        .loan-item {
+            background: rgba(255,255,255,0.95); border-radius: 10px;
+            margin: 10px 15px; padding: 15px;
+            display: flex; flex-direction: column;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .loan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer;}
+        .loan-no { background: #333; color: white; padding: 2px 8px; border-radius: 5px; font-size: 0.8rem; }
+        .loan-name { font-weight: 600; font-size: 1rem; margin-left: 10px; }
+        
+        .input-group-custom { display: flex; align-items: center; gap: 10px; }
+        .due-display { font-size: 0.75rem; color: #dc3545; font-weight: 600; white-space: nowrap;}
+        
+        .footer-total {
+            position: fixed; bottom: 0; width: 100%; height: 50px;
+            background: #333; color: white; display: flex; justify-content: space-between;
+            align-items: center; padding: 0 20px; z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-controls">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="m-0">Loan Collections</h5>
+            <button onclick="window.location.href='admin.html'" class="btn btn-sm btn-outline-dark"><i class="fas fa-home"></i></button>
+        </div>
+        <div class="d-flex gap-2">
+            <input type="date" id="collectionDate" class="form-control">
+            <input type="text" id="searchLoan" class="form-control" placeholder="Search No/Name">
+        </div>
+    </div>
+
+    <div id="loanList">
+        <div class="text-center text-white mt-5">Loading Loans...</div>
+    </div>
+
+    <div class="footer-total">
+        <span>Total Collected:</span>
+        <span id="sessionTotal" style="font-size: 1.2rem; font-weight: bold; color: #10b981;">₹0</span>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A", authDomain: "unarv-33742.firebaseapp.com", projectId: "unarv-33742" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // 1. Set Date to Monday
+        function setMonday() {
+            const d = new Date();
+            const day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6 : 1); 
+            document.getElementById('collectionDate').valueAsDate = new Date(d.setDate(diff));
+        }
+        setMonday();
+
+        let allLoans = [];
+        let sessionSum = 0;
+
+        // 2. Load Active Loans
+        async function loadLoans() {
+            const snap = await db.collection('loans').where('status', '==', 'active').get();
+            allLoans = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
+            
+            // Calculate Due Logic
+            // Simple Logic: If Balance > ((TotalInstallments - PaidWeeks) * WeeklyAmt) -> Pending
+            // For now, we show WeeklyAmt as default due. If balance is high, we can show arrears.
+            
+            renderLoans(allLoans);
+        }
+        loadLoans();
+
+        function renderLoans(loans) {
+            const container = document.getElementById('loanList');
+            container.innerHTML = loans.map(loan => {
+                // Calculate Pending
+                // For simplicity: Default Due = Weekly Amount.
+                // You can add complex arrear logic here if needed.
+                const due = loan.weeklyAmount; 
+                
+                return `
+                <div class="loan-item">
+                    <div class="loan-header" onclick="viewDetails('${loan.loanNo}')">
+                        <div>
+                            <span class="loan-no">#${loan.loanNo}</span>
+                            <span class="loan-name">${loan.userName}</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-muted"></i>
+                    </div>
+                    
+                    <div class="input-group-custom">
+                        <div class="due-display">
+                            Due: ₹${due}<br>
+                            Bal: ₹${loan.balance}
+                        </div>
+                        <input type="number" class="form-control" 
+                               value="${due}" 
+                               id="amt_${loan.id}" 
+                               onchange="updateTotal()">
+                        
+                        <button class="btn btn-success" onclick="pay('${loan.id}', ${loan.balance}, '${loan.userName}')">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // 3. Update Total when inputs change
+        window.updateTotal = function() {
+            // This is complex to track "unsaved" changes sum.
+            // Instead, we will track "Saved" sum in this session for simplicity as per prompt.
+        }
+
+        // 4. Pay Function
+        window.pay = async function(docId, currentBalance, name) {
+            const amount = parseFloat(document.getElementById(`amt_${docId}`).value);
+            const date = document.getElementById('collectionDate').value;
+
+            if(!amount || amount <= 0) return;
+
+            if(confirm(`Confirm payment of ₹${amount} for ${name}?`)) {
+                try {
+                    // Add Transaction
+                    await db.collection('loan_transactions').add({
+                        loanId: docId,
+                        loanNo: allLoans.find(l=>l.id==docId).loanNo,
+                        amount: amount,
+                        date: date,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // Update Loan Balance
+                    const newBal = currentBalance - amount;
+                    // Check if closed
+                    const status = newBal <= 0 ? 'closed' : 'active';
+
+                    await db.collection('loans').doc(docId).update({
+                        balance: newBal,
+                        status: status,
+                        paidWeeks: firebase.firestore.FieldValue.increment(1) // Assuming full payment
+                    });
+
+                    // Update UI Sum
+                    sessionSum += amount;
+                    document.getElementById('sessionTotal').innerText = `₹${sessionSum}`;
+                    
+                    // Visual Feedback
+                    const btn = document.querySelector(`button[onclick*="${docId}"]`);
+                    btn.className = "btn btn-secondary";
+                    btn.innerHTML = "Paid";
+                    btn.disabled = true;
+
+                } catch (error) {
+                    alert("Error: " + error.message);
+                }
+            }
+        };
+
+        window.viewDetails = function(loanNo) {
+            // Save loanNo to localstorage to pass to next page
+            localStorage.setItem('currentLoanNo', loanNo);
+            window.location.href = 'loan-details.html';
+        };
+        
+        // Search Filter
+        document.getElementById('searchLoan').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allLoans.filter(l => 
+                l.userName.toLowerCase().includes(term) || 
+                l.loanNo.toString().includes(term)
+            );
+            renderLoans(filtered);
+        });
+
+    </script>
+</body>
+</html>
