@@ -2,101 +2,336 @@
 <html lang="ml" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Loan Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary-orange: #FF6B35; --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-gradient); min-height: 100vh; padding: 20px; }
-        .card-custom { background: white; border-radius: 10px; padding: 15px; margin-bottom: 10px; }
-        .trans-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        :root {
+            --primary-orange: #FF6B35;
+            --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-color);
+            padding-top: 80px; 
+            padding-bottom: 60px;
+        }
+
+        /* Fixed Header */
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-image { height: 40px; width: auto; object-fit: contain; }
+
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--card-bg);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-orange);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        /* Content */
+        .content-wrapper {
+            padding: 0 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Loan Info Card */
+        .loan-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .loan-no-badge {
+            background: #333; color: white; padding: 4px 12px;
+            border-radius: 20px; font-size: 0.9rem; font-weight: 600;
+            display: inline-block; margin-bottom: 10px;
+        }
+
+        .grid-info {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+            margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;
+        }
+
+        .stat-box {
+            background: rgba(0,0,0,0.03); padding: 10px; border-radius: 10px;
+        }
+        .stat-label { font-size: 0.75rem; color: #666; }
+        .stat-val { font-size: 1.1rem; font-weight: 700; }
+
+        /* Transactions List */
+        .trans-list { width: 100%; max-width: 500px; }
+        .section-header { color: white; font-weight: 500; margin-bottom: 10px; }
+
+        .trans-item {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #10b981;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .trans-date { font-weight: 600; font-size: 0.9rem; display: block; }
+        .trans-meta { font-size: 0.75rem; color: #888; }
+        .trans-amount { font-weight: 700; font-size: 1.1rem; color: #10b981; margin-right: 15px; }
+
+        .btn-edit {
+            background: #eef2ff; color: #4f46e5; border: none;
+            width: 35px; height: 35px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-edit:hover { background: #4f46e5; color: white; }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: var(--card-bg);
+            border-top: 1px solid rgba(255, 107, 53, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            font-size: 0.8rem; font-weight: 500; color: #666;
+        }
+
     </style>
 </head>
 <body>
 
-    <button class="btn btn-light mb-3" onclick="window.history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+    <header class="header-container">
+        <button class="back-btn" onclick="window.location.href='manage-loans.html'">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <img src="head.png" alt="Header" class="header-image" onerror="this.style.display='none'">
+    </header>
 
-    <div class="card-custom" id="loanInfo">
-        Loading Details...
-    </div>
+    <main class="content-wrapper">
+        
+        <div id="loanCard" class="loan-card">
+            <div class="text-primary"><i class="fas fa-spinner fa-spin"></i> Loading Info...</div>
+        </div>
 
-    <h6 class="text-white mt-4">Transactions</h6>
-    <div class="card-custom" id="transList">
-        Loading...
-    </div>
+        <div class="trans-list">
+            <div class="section-header">Transaction History</div>
+            <div id="transList">
+                <div class="text-center text-white mt-3">
+                    <i class="fas fa-spinner fa-spin"></i> Loading Transactions...
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        Powered by VTSoft 2025
+    </footer>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
         const firebaseConfig = { apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A", authDomain: "unarv-33742.firebaseapp.com", projectId: "unarv-33742" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // Get Loan No from LocalStorage
         const loanNo = parseInt(localStorage.getItem('currentLoanNo'));
-        let loanDocId = '';
+        let loanDocId = ''; // To store the document ID for updating balance
+
+        if (!loanNo) {
+            alert("No loan selected!");
+            window.location.href = 'manage-loans.html';
+        }
 
         async function loadData() {
-            // 1. Get Loan Info
-            const loanSnap = await db.collection('loans').where('loanNo', '==', loanNo).get();
-            if (loanSnap.empty) return;
-            
-            const loan = loanSnap.docs[0].data();
-            loanDocId = loanSnap.docs[0].id;
+            try {
+                // 1. Get Loan Info
+                const loanSnap = await db.collection('loans')
+                    .where('loanNo', '==', loanNo)
+                    .limit(1)
+                    .get();
 
-            document.getElementById('loanInfo').innerHTML = `
-                <h3 class="text-primary">#${loan.loanNo}</h3>
-                <h5>${loan.userName}</h5>
-                <hr>
-                <div class="d-flex justify-content-between">
-                    <span>Sanctioned: <b>₹${loan.amount}</b></span>
-                    <span>Balance: <b class="text-danger">₹${loan.balance}</b></span>
-                </div>
-                <small class="text-muted">Weekly: ₹${loan.weeklyAmount} | Weeks: ${loan.installments}</small>
-            `;
+                if (loanSnap.empty) {
+                    document.getElementById('loanCard').innerHTML = "Loan not found.";
+                    return;
+                }
 
-            // 2. Get Transactions
-            const transSnap = await db.collection('loan_transactions')
-                .where('loanNo', '==', loanNo)
-                .orderBy('date', 'desc')
-                .get();
+                const loan = loanSnap.docs[0].data();
+                loanDocId = loanSnap.docs[0].id; // Save ID for later use
 
-            const transList = document.getElementById('transList');
-            transList.innerHTML = transSnap.docs.map(doc => {
-                const t = doc.data();
-                return `
-                <div class="trans-item">
-                    <div>
-                        <strong>₹${t.amount}</strong><br>
-                        <small class="text-muted">${t.date}</small>
+                // Render Loan Card
+                document.getElementById('loanCard').innerHTML = `
+                    <span class="loan-no-badge">Loan #${loan.loanNo}</span>
+                    <h4 style="font-weight:700; color:#333;">${loan.userName}</h4>
+                    <div style="font-size:0.9rem; color:#666;">Surety: ${loan.suretyName || '-'}</div>
+                    
+                    <div class="grid-info">
+                        <div class="stat-box">
+                            <div class="stat-label">Sanctioned</div>
+                            <div class="stat-val text-primary">₹${loan.amount}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Balance</div>
+                            <div class="stat-val text-danger">₹${loan.balance}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Weekly</div>
+                            <div class="stat-val">₹${loan.weeklyAmount}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Paid Weeks</div>
+                            <div class="stat-val">${loan.paidWeeks || 0} / ${loan.installments}</div>
+                        </div>
                     </div>
-                    <button class="btn btn-sm btn-outline-primary" onclick="editTrans('${doc.id}', ${t.amount})">
-                        <i class="fas fa-pen"></i>
-                    </button>
-                </div>`;
-            }).join('');
+                `;
+
+                // 2. Get Transactions (WITHOUT orderBy in query to fix Index error)
+                const transSnap = await db.collection('loan_transactions')
+                    .where('loanNo', '==', loanNo)
+                    .get();
+
+                const listEl = document.getElementById('transList');
+
+                if (transSnap.empty) {
+                    listEl.innerHTML = '<div class="text-center text-white small">No transactions yet.</div>';
+                    return;
+                }
+
+                // Process and Sort Client-side
+                let transactions = [];
+                transSnap.forEach(doc => {
+                    transactions.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort by Date (Descending)
+                transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // Render Transactions
+                listEl.innerHTML = transactions.map(t => `
+                    <div class="trans-item">
+                        <div style="flex:1;">
+                            <span class="trans-date">
+                                <i class="far fa-calendar-alt me-2"></i>${formatDate(t.date)}
+                            </span>
+                            <span class="trans-meta">Updated: ${t.timestamp ? new Date(t.timestamp.seconds * 1000).toLocaleTimeString() : '-'}</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="trans-amount">₹${t.amount}</span>
+                            <button class="btn-edit" onclick="editTransaction('${t.id}', ${t.amount})">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('transList').innerHTML = `<div class="text-center text-danger bg-white p-2 rounded">Error: ${error.message}</div>`;
+            }
         }
+
+        // Initialize
         loadData();
 
-        window.editTrans = async function(transId, oldAmount) {
-            const newAmount = prompt("Enter new amount:", oldAmount);
-            if (newAmount && newAmount != oldAmount) {
-                const diff = parseFloat(oldAmount) - parseFloat(newAmount);
-                
-                // Update Transaction
-                await db.collection('loan_transactions').doc(transId).update({ amount: parseFloat(newAmount) });
-                
-                // Update Loan Balance (Reverse logic: if paid less, balance increases)
-                await db.collection('loans').doc(loanDocId).update({
-                    balance: firebase.firestore.FieldValue.increment(diff)
+        // Format Date
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const parts = dateStr.split('-');
+            if(parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            return dateStr;
+        }
+
+        // Edit Transaction Function
+        window.editTransaction = async function(transId, oldAmount) {
+            const newAmountStr = prompt("Enter correct amount:", oldAmount);
+            if (newAmountStr === null) return; // Cancelled
+
+            const newAmount = parseFloat(newAmountStr);
+            if (isNaN(newAmount) || newAmount <= 0) {
+                alert("Invalid amount!");
+                return;
+            }
+
+            if (newAmount === oldAmount) return; // No change
+
+            // Calculate Difference
+            // Example: Old 100, New 200. Diff = 100. Balance should reduce by 100.
+            // Example: Old 200, New 100. Diff = -100. Balance should increase by 100.
+            const diff = newAmount - oldAmount;
+
+            try {
+                // 1. Update Transaction
+                await db.collection('loan_transactions').doc(transId).update({
+                    amount: newAmount,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp() // Update time
                 });
-                
-                alert("Updated!");
-                loadData();
+
+                // 2. Update Loan Balance
+                // Note: We use MINUS diff because:
+                // If I paid MORE (positive diff), my balance should LESSEN.
+                // If I paid LESS (negative diff), my balance should INCREASE.
+                await db.collection('loans').doc(loanDocId).update({
+                    balance: firebase.firestore.FieldValue.increment(-diff)
+                });
+
+                alert("✅ Transaction Updated!");
+                loadData(); // Refresh page
+
+            } catch (error) {
+                alert("Update failed: " + error.message);
             }
         };
+
     </script>
 </body>
 </html>
