@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary-orange: #FF6B35; --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-gradient); min-height: 100vh; padding-top: 120px; padding-bottom: 60px; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-gradient); min-height: 100vh; padding-top: 130px; padding-bottom: 70px; }
         
         /* Sticky Header */
         .top-controls {
@@ -19,45 +19,85 @@
         
         /* Loan List */
         .loan-item {
-            background: rgba(255,255,255,0.95); border-radius: 10px;
+            background: rgba(255,255,255,0.95); border-radius: 12px;
             margin: 10px 15px; padding: 15px;
             display: flex; flex-direction: column;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s;
         }
-        .loan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer;}
-        .loan-no { background: #333; color: white; padding: 2px 8px; border-radius: 5px; font-size: 0.8rem; }
-        .loan-name { font-weight: 600; font-size: 1rem; margin-left: 10px; }
+
+        .loan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer;}
         
-        .input-group-custom { display: flex; align-items: center; gap: 10px; }
-        .due-display { font-size: 0.75rem; color: #dc3545; font-weight: 600; white-space: nowrap;}
+        .loan-badge { 
+            background: #333; color: white; padding: 2px 8px; 
+            border-radius: 6px; font-size: 0.75rem; font-weight: 600; 
+        }
         
+        .inst-badge {
+            background: #e0e7ff; color: #4338ca; 
+            padding: 2px 8px; border-radius: 6px; 
+            font-size: 0.75rem; font-weight: 700; margin-left: 5px;
+        }
+
+        .loan-name { font-weight: 600; font-size: 1rem; margin-left: 8px; color: #333; }
+        
+        .action-row { display: flex; align-items: center; gap: 10px; }
+        
+        .info-col { font-size: 0.75rem; color: #666; line-height: 1.4; white-space: nowrap; }
+        .text-due { color: #dc3545; font-weight: 600; }
+        
+        .form-control-custom { 
+            border: 1px solid #ddd; border-radius: 8px; padding: 8px; 
+            font-weight: 600; text-align: right; 
+        }
+
+        .btn-pay { 
+            border-radius: 8px; width: 50px; height: 38px; 
+            display: flex; align-items: center; justify-content: center; 
+        }
+
+        /* Already Paid State */
+        .paid-row { border-left: 5px solid #10b981; }
+        .paid-input { background-color: #f0fdf4; border-color: #10b981; color: #10b981; }
+
+        /* Footer Total */
         .footer-total {
             position: fixed; bottom: 0; width: 100%; height: 50px;
-            background: #333; color: white; display: flex; justify-content: space-between;
+            background: #fff; border-top: 1px solid #eee;
+            display: flex; justify-content: space-between;
             align-items: center; padding: 0 20px; z-index: 1000;
         }
+        .total-label { font-size: 0.9rem; color: #666; }
+        .total-val { font-size: 1.2rem; font-weight: 700; color: #10b981; }
+
     </style>
 </head>
 <body>
 
     <div class="top-controls">
         <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5 class="m-0">Loan Collections</h5>
-            <button onclick="window.location.href='admin.html'" class="btn btn-sm btn-outline-dark"><i class="fas fa-home"></i></button>
+            <h5 class="m-0 fw-bold" style="color:#444;">Loan Collections</h5>
+            <button onclick="window.location.href='admin.html'" class="btn btn-sm btn-light border"><i class="fas fa-home"></i></button>
         </div>
-        <div class="d-flex gap-2">
-            <input type="date" id="collectionDate" class="form-control">
-            <input type="text" id="searchLoan" class="form-control" placeholder="Search No/Name">
+        <div class="row g-2">
+            <div class="col-7">
+                <input type="date" id="collectionDate" class="form-control form-control-sm fw-bold">
+            </div>
+            <div class="col-5">
+                <input type="text" id="searchLoan" class="form-control form-control-sm" placeholder="Search...">
+            </div>
+        </div>
+        <div id="loadingIndicator" class="text-center mt-1 text-primary" style="font-size:0.7rem; display:none;">
+            <i class="fas fa-spinner fa-spin"></i> Checking existing records...
         </div>
     </div>
 
     <div id="loanList">
-        <div class="text-center text-white mt-5">Loading Loans...</div>
-    </div>
+        </div>
 
     <div class="footer-total">
-        <span>Total Collected:</span>
-        <span id="sessionTotal" style="font-size: 1.2rem; font-weight: bold; color: #10b981;">₹0</span>
+        <span class="total-label">Day Total:</span>
+        <span id="dayTotal" class="total-val">₹0</span>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -69,7 +109,12 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 1. Set Date to Monday
+        // Global State
+        let allLoans = [];
+        let todaysTransactions = {}; // Map: loanId -> transactionData
+        let daySum = 0;
+
+        // 1. Initial Setup
         function setMonday() {
             const d = new Date();
             const day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6 : 1); 
@@ -77,112 +122,185 @@
         }
         setMonday();
 
-        let allLoans = [];
-        let sessionSum = 0;
-
-        // 2. Load Active Loans
-        async function loadLoans() {
+        // 2. Load Active Loans (Once)
+        async function init() {
+            document.getElementById('loadingIndicator').style.display = 'block';
+            
+            // Fetch Loans
             const snap = await db.collection('loans').where('status', '==', 'active').get();
             allLoans = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
             
-            // Calculate Due Logic
-            // Simple Logic: If Balance > ((TotalInstallments - PaidWeeks) * WeeklyAmt) -> Pending
-            // For now, we show WeeklyAmt as default due. If balance is high, we can show arrears.
-            
-            renderLoans(allLoans);
+            // Load Transactions for the default date
+            await loadTransactionsForDate();
         }
-        loadLoans();
+        init();
 
-        function renderLoans(loans) {
+        // 3. Listen for Date Change
+        document.getElementById('collectionDate').addEventListener('change', async () => {
+            await loadTransactionsForDate();
+        });
+
+        // 4. Fetch Transactions for Selected Date
+        async function loadTransactionsForDate() {
+            const date = document.getElementById('collectionDate').value;
+            const indicator = document.getElementById('loadingIndicator');
+            
+            indicator.style.display = 'block';
+            indicator.innerHTML = `<i class="fas fa-sync fa-spin"></i> Loading data for ${date}...`;
+
+            todaysTransactions = {}; // Reset
+            daySum = 0;
+
+            try {
+                // Query transactions for this specific date
+                const snap = await db.collection('loan_transactions')
+                    .where('date', '==', date)
+                    .get();
+
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    todaysTransactions[data.loanId] = data; // Store using Loan ID as key
+                    daySum += parseFloat(data.amount);
+                });
+
+                renderList(); // Re-render the UI with new data
+
+            } catch (error) {
+                console.error("Error loading transactions:", error);
+            } finally {
+                indicator.style.display = 'none';
+            }
+        }
+
+        // 5. Render Logic
+        function renderList(filteredLoans = null) {
             const container = document.getElementById('loanList');
-            container.innerHTML = loans.map(loan => {
-                // Calculate Pending
-                // For simplicity: Default Due = Weekly Amount.
-                // You can add complex arrear logic here if needed.
-                const due = loan.weeklyAmount; 
+            const loansToRender = filteredLoans || allLoans;
+            
+            if(loansToRender.length === 0) {
+                container.innerHTML = '<div class="text-center text-white mt-5">No active loans found.</div>';
+                return;
+            }
+
+            container.innerHTML = loansToRender.map(loan => {
+                const trans = todaysTransactions[loan.id]; // Check if paid today
+                const isPaid = !!trans; // Boolean: true if paid
                 
+                // If paid, show paid amount. If not, show default weekly amount
+                const displayAmount = isPaid ? trans.amount : loan.weeklyAmount;
+                const rowClass = isPaid ? 'paid-row' : '';
+                const inputClass = isPaid ? 'paid-input' : '';
+                
+                // Installment Counter logic
+                // Currently paid weeks + 1 (if not paid today)
+                const currentInst = isPaid ? loan.paidWeeks : (loan.paidWeeks + 1);
+                const instBadge = `${loan.paidWeeks}/${loan.installments}`;
+
                 return `
-                <div class="loan-item">
+                <div class="loan-item ${rowClass}">
                     <div class="loan-header" onclick="viewDetails('${loan.loanNo}')">
-                        <div>
-                            <span class="loan-no">#${loan.loanNo}</span>
+                        <div class="d-flex align-items-center">
+                            <span class="loan-badge">#${loan.loanNo}</span>
                             <span class="loan-name">${loan.userName}</span>
+                            <span class="inst-badge" title="Installments Paid">${instBadge}</span>
                         </div>
-                        <i class="fas fa-chevron-right text-muted"></i>
+                        <i class="fas fa-chevron-right text-muted" style="font-size:0.8rem"></i>
                     </div>
                     
-                    <div class="input-group-custom">
-                        <div class="due-display">
-                            Due: ₹${due}<br>
-                            Bal: ₹${loan.balance}
+                    <div class="action-row">
+                        <div class="info-col">
+                            <div>Due: <span class="text-due">₹${loan.weeklyAmount}</span></div>
+                            <div>Bal: ₹${loan.balance}</div>
                         </div>
-                        <input type="number" class="form-control" 
-                               value="${due}" 
-                               id="amt_${loan.id}" 
-                               onchange="updateTotal()">
                         
-                        <button class="btn btn-success" onclick="pay('${loan.id}', ${loan.balance}, '${loan.userName}')">
-                            <i class="fas fa-check"></i>
-                        </button>
+                        <input type="number" 
+                               class="form-control form-control-custom ${inputClass}" 
+                               id="amt_${loan.id}" 
+                               value="${displayAmount}" 
+                               ${isPaid ? 'readonly' : ''}> ${isPaid 
+                            ? `<button class="btn btn-sm btn-success btn-pay" disabled><i class="fas fa-check-double"></i></button>` 
+                            : `<button class="btn btn-sm btn-outline-primary btn-pay" onclick="pay('${loan.id}', ${loan.balance}, '${loan.userName}')"><i class="fas fa-save"></i></button>`
+                        }
                     </div>
                 </div>
                 `;
             }).join('');
+
+            // Update Total Footer
+            document.getElementById('dayTotal').innerText = `₹${daySum.toLocaleString()}`;
         }
 
-        // 3. Update Total when inputs change
-        window.updateTotal = function() {
-            // This is complex to track "unsaved" changes sum.
-            // Instead, we will track "Saved" sum in this session for simplicity as per prompt.
-        }
-
-        // 4. Pay Function
-        window.pay = async function(docId, currentBalance, name) {
-            const amount = parseFloat(document.getElementById(`amt_${docId}`).value);
+        // 6. Pay Function
+        window.pay = async function(loanId, currentBalance, name) {
+            const amountInput = document.getElementById(`amt_${loanId}`);
+            const amount = parseFloat(amountInput.value);
             const date = document.getElementById('collectionDate').value;
 
-            if(!amount || amount <= 0) return;
+            // Security Check: Is it Monday? (Optional warning, not blocking as per request)
+            /*
+            const d = new Date(date);
+            if(d.getDay() !== 1) {
+                if(!confirm("Warning: The selected date is NOT a Monday. Continue?")) return;
+            }
+            */
 
-            if(confirm(`Confirm payment of ₹${amount} for ${name}?`)) {
-                try {
-                    // Add Transaction
-                    await db.collection('loan_transactions').add({
-                        loanId: docId,
-                        loanNo: allLoans.find(l=>l.id==docId).loanNo,
-                        amount: amount,
-                        date: date,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+            if(!amount || amount <= 0) { alert("Enter valid amount"); return; }
 
-                    // Update Loan Balance
-                    const newBal = currentBalance - amount;
-                    // Check if closed
-                    const status = newBal <= 0 ? 'closed' : 'active';
+            // Prevent Double Entry (Client Side Check)
+            if(todaysTransactions[loanId]) {
+                alert("Payment already recorded for this date! Refreshing...");
+                loadTransactionsForDate();
+                return;
+            }
 
-                    await db.collection('loans').doc(docId).update({
-                        balance: newBal,
-                        status: status,
-                        paidWeeks: firebase.firestore.FieldValue.increment(1) // Assuming full payment
-                    });
+            const btn = event.currentTarget;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
 
-                    // Update UI Sum
-                    sessionSum += amount;
-                    document.getElementById('sessionTotal').innerText = `₹${sessionSum}`;
-                    
-                    // Visual Feedback
-                    const btn = document.querySelector(`button[onclick*="${docId}"]`);
-                    btn.className = "btn btn-secondary";
-                    btn.innerHTML = "Paid";
-                    btn.disabled = true;
+            try {
+                // A. Add Transaction
+                await db.collection('loan_transactions').add({
+                    loanId: loanId,
+                    loanNo: allLoans.find(l=>l.id==loanId).loanNo,
+                    amount: amount,
+                    date: date,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
 
-                } catch (error) {
-                    alert("Error: " + error.message);
+                // B. Update Loan Balance & Paid Weeks
+                const newBal = currentBalance - amount;
+                const newStatus = newBal <= 0 ? 'closed' : 'active';
+                
+                await db.collection('loans').doc(loanId).update({
+                    balance: newBal,
+                    paidWeeks: firebase.firestore.FieldValue.increment(1),
+                    status: newStatus
+                });
+
+                // C. Update Local State (Optimistic Update)
+                // We add this to todaysTransactions so the UI updates instantly
+                todaysTransactions[loanId] = { amount: amount };
+                daySum += amount;
+                
+                // Update the specific loan object in allLoans to reflect new balance locally
+                const loanIdx = allLoans.findIndex(l => l.id == loanId);
+                if(loanIdx > -1) {
+                    allLoans[loanIdx].balance = newBal;
+                    allLoans[loanIdx].paidWeeks += 1;
                 }
+
+                // Re-render
+                renderList(); 
+
+            } catch (error) {
+                alert("Error: " + error.message);
+                btn.innerHTML = '<i class="fas fa-save"></i>';
+                btn.disabled = false;
             }
         };
 
+        // View Details
         window.viewDetails = function(loanNo) {
-            // Save loanNo to localstorage to pass to next page
             localStorage.setItem('currentLoanNo', loanNo);
             window.location.href = 'loan-details.html';
         };
@@ -194,7 +312,7 @@
                 l.userName.toLowerCase().includes(term) || 
                 l.loanNo.toString().includes(term)
             );
-            renderLoans(filtered);
+            renderList(filtered);
         });
 
     </script>
