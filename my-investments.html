@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ml" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Investments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --card-bg: rgba(255, 255, 255, 0.95); }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-gradient); min-height: 100vh; padding-top: 80px; padding-bottom: 60px; }
+        
+        .header-container { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .header-image { height: 40px; width: auto; object-fit: contain; }
+
+        .inv-card { background: var(--card-bg); border-radius: 15px; padding: 20px; width: 90%; max-width: 500px; margin: 0 auto 20px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        .progress-bar-custom { height: 8px; background: #eee; border-radius: 4px; margin: 15px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #8b5cf6, #d946ef); width: 0%; transition: width 1s; }
+
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px; }
+        .stat-label { font-size: 0.75rem; color: #666; }
+        .stat-val { font-weight: 700; font-size: 1rem; }
+
+        .footer { position: fixed; bottom: 0; width: 100%; height: 50px; background: white; display: flex; justify-content: center; align-items: center; z-index: 1000; }
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <img src="head.png" alt="Header" class="header-image" onerror="this.style.display='none'">
+    </header>
+
+    <div id="listContainer">
+        <div class="text-center text-white mt-5"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+    </div>
+
+    <footer class="footer">
+        <i class="fas fa-home fs-4 text-primary" onclick="window.location.href='index.html'"></i>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A", authDomain: "unarv-33742.firebaseapp.com", projectId: "unarv-33742" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        auth.onAuthStateChanged(user => {
+            if(user) loadInvestments(user.uid);
+            else window.location.href = 'login.html';
+        });
+
+        async function loadInvestments(uid) {
+            const container = document.getElementById('listContainer');
+            const snap = await db.collection('investments').where('userId', '==', uid).get();
+
+            if(snap.empty) { container.innerHTML = '<div class="text-center text-white mt-5">No investments found.</div>'; return; }
+
+            let html = '';
+            snap.forEach(doc => {
+                const inv = doc.data();
+                const total = inv.amount; 
+                // Note: Logic assumption - 'amount' is what they put in. 'balanceToReturn' is what is left to pay them.
+                // If profit is involved, logic might need tweak. Here assuming Principal return.
+                const returned = total - inv.balanceToReturn;
+                const percent = Math.round((returned / total) * 100);
+
+                html += `
+                <div class="inv-card">
+                    <h5 class="fw-bold text-primary">Investment Portfolio</h5>
+                    <div class="d-flex justify-content-between small text-muted">
+                        <span>Status: ${inv.status.toUpperCase()}</span>
+                        <span>${inv.returnedWeeks}/${inv.installments} Weeks</span>
+                    </div>
+
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill" style="width: ${percent}%"></div>
+                    </div>
+
+                    <div class="stat-grid">
+                        <div class="text-center">
+                            <span class="stat-label">Invested</span>
+                            <div class="stat-val">₹${inv.amount}</div>
+                        </div>
+                        <div class="text-center">
+                            <span class="stat-label">Received Back</span>
+                            <div class="stat-val text-success">₹${returned}</div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
