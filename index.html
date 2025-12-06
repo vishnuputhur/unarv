@@ -11,93 +11,102 @@
         :root {
             --primary-orange: #FF6B35;
             --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
-            --shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+            --shadow: 0 4px 15px rgba(255, 107, 53, 0.15);
             --card-bg: rgba(255, 255, 255, 0.95);
             --text-color: #333;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         [data-theme="dark"] {
             --card-bg: rgba(45, 45, 45, 0.95);
             --text-color: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-gradient);
             min-height: 100vh;
-            display: flex; flex-direction: column;
             color: var(--text-color);
-            overflow-x: hidden;
+            overflow-x: hidden; /* Prevent body scroll, handle inside wrapper */
+            padding-top: 60px; /* Header Space */
+            padding-bottom: 40px; /* Footer Space */
         }
 
-        /* Header */
+        /* Fixed Header */
         .header-container {
-            width: 100%; height: 70px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
             display: flex; justify-content: center; align-items: center;
-            padding: 0 10px; flex-shrink: 0;
+            z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .header-image { height: 50px; width: auto; object-fit: contain; }
+        .header-image { height: 40px; width: auto; object-fit: contain; }
 
         /* Content */
         .content-wrapper {
-            flex: 1; display: flex; flex-direction: column;
-            align-items: center; padding: 20px 15px; width: 100%;
+            padding: 15px; display: flex; flex-direction: column;
+            align-items: center; width: 100%;
         }
 
+        /* Compact Dashboard Card */
         .dashboard-card {
             background: var(--card-bg); backdrop-filter: blur(20px);
-            border-radius: 15px; padding: 25px; box-shadow: var(--shadow);
+            border-radius: 15px; padding: 20px; box-shadow: var(--shadow);
             width: 100%; max-width: 450px;
         }
 
         .user-greeting {
-            text-align: center; margin-bottom: 25px;
-            color: var(--primary-orange); font-weight: 600; font-size: 1.4rem;
+            text-align: center; margin-bottom: 20px;
+            color: var(--primary-orange); font-weight: 600; font-size: 1.3rem;
         }
 
-        /* Status Grid */
+        /* Status Grid (Compact) */
         .status-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 15px; margin-bottom: 25px;
+            gap: 10px; margin-bottom: 20px;
         }
 
         .status-card {
-            background: rgba(0,0,0,0.05); padding: 15px;
-            border-radius: 12px; border-left: 4px solid var(--primary-orange);
+            background: rgba(0,0,0,0.05); padding: 10px;
+            border-radius: 10px; border-left: 4px solid var(--primary-orange);
             text-align: center;
         }
 
-        .status-title { font-size: 0.8rem; color: #666; margin-bottom: 5px; }
-        .status-value { font-size: 1.2rem; font-weight: 700; color: var(--text-color); }
+        .status-title { font-size: 0.75rem; color: #666; margin-bottom: 2px; }
+        .status-value { font-size: 1.1rem; font-weight: 700; color: var(--text-color); }
 
-        /* Button Grid */
+        /* Due Status Text */
+        .due-good { color: #10b981; font-weight: 700; font-size: 0.9rem; }
+        .due-bad { color: #ef4444; font-weight: 700; font-size: 0.9rem; }
+
+        /* Button Grid (Compact) */
         .button-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
         }
 
         .app-btn {
-            background: var(--gradient); border: none; border-radius: 12px;
-            padding: 10px; color: white; font-weight: 500; font-size: 0.85rem;
+            background: var(--gradient); border: none; border-radius: 10px;
+            padding: 8px; color: white; font-weight: 500; font-size: 0.8rem;
             box-shadow: var(--shadow); transition: transform 0.2s;
-            height: 75px; display: flex; flex-direction: column;
+            height: 70px; display: flex; flex-direction: column;
             align-items: center; justify-content: center; text-align: center; cursor: pointer;
         }
 
         .app-btn:active { transform: scale(0.95); }
-        .app-btn i { font-size: 1.4rem; margin-bottom: 5px; }
+        .app-btn i { font-size: 1.3rem; margin-bottom: 5px; }
 
         .admin-btn { background: linear-gradient(135deg, #333 0%, #555 100%); grid-column: span 2; }
 
-        /* Footer */
+        /* Fixed Footer */
         .footer {
-            width: 100%; background: var(--card-bg);
-            border-top: 2px solid rgba(255, 107, 53, 0.3);
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 40px;
+            background: var(--card-bg); border-top: 1px solid rgba(255, 107, 53, 0.3);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 15px; font-size: 0.8rem;
+            padding: 0 15px; font-size: 0.75rem; z-index: 1000;
         }
-        .theme-toggle-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
+        .theme-toggle-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; }
 
     </style>
 </head>
@@ -117,17 +126,23 @@
             <div class="status-grid">
                 <div class="status-card">
                     <div class="status-title">Total Asset</div>
-                    <div class="status-value" id="totalAsset"><i class="fas fa-spinner fa-spin"></i></div>
+                    <div class="status-value" id="totalAsset">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
                 </div>
 
                 <div class="status-card">
                     <div class="status-title">Loan Balance</div>
-                    <div class="status-value" id="loanBalance"><i class="fas fa-spinner fa-spin"></i></div>
+                    <div class="status-value" id="loanBalance">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
                 </div>
 
-                <div class="status-card" style="grid-column: span 2;">
-                    <div class="status-title">Weekly Status</div>
-                    <div class="status-value" id="dueStatus" style="font-size: 1rem;">Checking...</div>
+                <div class="status-card" style="grid-column: span 2; padding: 12px;">
+                    <div class="status-title">Subscription Status</div>
+                    <div id="dueStatus" style="margin-top: 5px;">
+                        Checking...
+                    </div>
                 </div>
             </div>
 
@@ -136,6 +151,11 @@
                 <button class="app-btn" onclick="navigateTo('my-loans')">
                     <i class="fas fa-file-invoice-dollar"></i>
                     My Loans
+                </button>
+
+                <button class="app-btn" onclick="navigateTo('public-loans')">
+                    <i class="fas fa-list-ul"></i>
+                    All Loans
                 </button>
 
                 <button class="app-btn" onclick="navigateTo('my-investments')">
@@ -156,11 +176,6 @@
                 <button class="app-btn" onclick="navigateTo('profile')">
                     <i class="fas fa-user-circle"></i>
                     Profile
-                </button>
-
-                <button class="app-btn" onclick="navigateTo('change-password')">
-                    <i class="fas fa-key"></i>
-                    Password
                 </button>
 
                 <div id="adminSection" style="display: none; grid-column: span 2;">
@@ -208,41 +223,73 @@
                     if(data.role === 'admin') document.getElementById('adminSection').style.display = 'block';
                 }
 
-                // 2. Total Asset (Investments) - FIXED LOGIC
-                // Using 'investments' collection created in add-investment
-                db.collection('investments').where('userId', '==', uid).get().then(snap => {
-                    let total = 0;
-                    snap.forEach(doc => {
-                        total += (parseFloat(doc.data().amount) || 0);
+                // 2. Total Asset (Fixed Logic)
+                try {
+                    const invSnap = await db.collection('investments').where('userId', '==', uid).get();
+                    let totalInv = 0;
+                    invSnap.forEach(doc => {
+                        totalInv += (parseFloat(doc.data().amount) || 0);
                     });
-                    document.getElementById('totalAsset').innerText = `₹${total.toLocaleString()}`;
-                }).catch(err => {
-                    console.error("Inv Error", err);
+                    document.getElementById('totalAsset').innerText = `₹${totalInv.toLocaleString()}`;
+                } catch(e) {
                     document.getElementById('totalAsset').innerText = "₹0";
-                });
+                }
 
                 // 3. Loan Balance
-                db.collection('loans').where('userId', '==', uid).where('status', '==', 'active').get().then(snap => {
+                try {
+                    const loanSnap = await db.collection('loans')
+                        .where('userId', '==', uid).where('status', '==', 'active').get();
                     let bal = 0;
-                    snap.forEach(doc => {
+                    loanSnap.forEach(doc => {
                         bal += (parseFloat(doc.data().balance) || 0);
                     });
                     document.getElementById('loanBalance').innerText = `₹${bal.toLocaleString()}`;
+                } catch(e) {
+                    document.getElementById('loanBalance').innerText = "₹0";
+                }
+
+                // 4. DUE CHECK LOGIC (Weekly)
+                try {
+                    // Fetch Subscriptions (Avoid orderBy to prevent crash, sort in JS)
+                    const subSnap = await db.collection('subscriptions').where('userId', '==', uid).get();
                     
-                    if(bal > 0) {
-                        document.getElementById('dueStatus').innerHTML = `<span style="color:#f59e0b">Loan Active</span>`;
+                    if (subSnap.empty) {
+                        document.getElementById('dueStatus').innerHTML = `<span class="due-bad">Start Payment</span>`;
                     } else {
-                        document.getElementById('dueStatus').innerHTML = `<span style="color:#10b981">No Dues</span>`;
+                        // Find latest payment date
+                        let dates = [];
+                        subSnap.forEach(doc => dates.push(new Date(doc.data().date)));
+                        const lastDate = new Date(Math.max.apply(null, dates));
+                        
+                        const today = new Date();
+                        const diffTime = Math.abs(today - lastDate);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                        const weeksPassed = Math.floor(diffDays / 7);
+
+                        // If paid within this week (0) or last week (1) -> Good
+                        if (weeksPassed <= 1) {
+                            document.getElementById('dueStatus').innerHTML = 
+                                `<span class="due-good"><i class="fas fa-check-circle me-1"></i> Good, you have no due</span>`;
+                        } else {
+                            // Calculate pending weeks (Subtract 1 as grace)
+                            const dueWeeks = weeksPassed;
+                            document.getElementById('dueStatus').innerHTML = 
+                                `<span class="due-bad"><i class="fas fa-exclamation-triangle me-1"></i> ${dueWeeks} Weeks Due</span>`;
+                        }
                     }
-                });
+                } catch(e) {
+                    console.error(e);
+                    document.getElementById('dueStatus').innerText = "Status Unavailable";
+                }
             }
 
             // Navigation
             window.navigateTo = function(page) {
                 const pages = {
                     'profile': 'profile.html',
-                    'my-loans': 'my-loans.html',            // Fixed Link
-                    'my-investments': 'my-investments.html', // Fixed Link
+                    'my-loans': 'my-loans.html',
+                    'public-loans': 'public-loans.html',
+                    'my-investments': 'my-investments.html',
                     'members': 'members.html',
                     'subscription': 'subscription.html',
                     'change-password': 'change-password.html',
