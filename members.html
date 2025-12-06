@@ -11,196 +11,102 @@
         :root {
             --primary-orange: #FF6B35;
             --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-color: #333;
             --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --text-color: #333;
         }
-
-        [data-theme="dark"] {
-            --card-bg: rgba(45, 45, 45, 0.95);
-            --text-color: #ffffff;
-            --bg-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Poppins', sans-serif;
             background: var(--bg-gradient);
             min-height: 100vh;
             color: var(--text-color);
-            /* Important: Add padding so content doesn't hide behind fixed header/footer */
             padding-top: 80px; 
             padding-bottom: 60px;
         }
 
-        /* --- 1. FIXED HEADER --- */
+        /* Header */
         .header-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.1); /* Slight transparency */
-            backdrop-filter: blur(10px); /* Glass effect */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000; /* Stay on top */
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed; top: 0; left: 0; width: 100%; height: 70px;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
+        .header-image { height: 50px; width: auto; object-fit: contain; }
 
-        .header-image {
-            height: 50px; /* Reduced slightly to fit */
-            width: auto;
-            object-fit: contain;
-        }
-
-        .back-btn {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--card-bg);
-            border: none;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-orange);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            cursor: pointer;
-            z-index: 1001;
-        }
-
-        /* --- 2. CONTENT AREA --- */
+        /* Content */
         .content-wrapper {
-            width: 100%;
-            padding: 0 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 0 15px; width: 100%; max-width: 600px; margin: 0 auto;
         }
 
-        .page-title {
-            color: white;
-            font-weight: 600;
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        .section-title {
+            color: white; font-weight: 600; margin-top: 15px; margin-bottom: 10px;
+            font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;
+            border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 5px;
         }
 
-        .search-box {
-            width: 100%;
-            max-width: 450px;
-            margin-bottom: 20px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 25px;
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-size: 0.9rem;
-            outline: none;
-        }
-
-        .members-list {
-            width: 100%;
-            max-width: 450px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
+        /* Member Card Styles */
         .member-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 12px; padding: 15px; margin-bottom: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative;
+            display: flex; flex-direction: column; gap: 5px;
         }
 
-        .member-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 12px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding-bottom: 10px;
+        /* Class A Style */
+        .card-class-a {
+            background: rgba(255, 255, 255, 0.95);
+            border-left: 5px solid var(--primary-orange);
         }
 
-        .member-avatar {
-            width: 45px;
-            height: 45px;
-            background: var(--gradient);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+        /* Class B Style */
+        .card-class-b {
+            background: rgba(230, 242, 255, 0.95); /* Light Blue Tint */
+            border-left: 5px solid #3b82f6; /* Blue Border */
         }
 
-        .member-name { font-weight: 600; font-size: 1.05rem; }
-        .member-role { font-size: 0.75rem; background: #eee; padding: 2px 8px; border-radius: 10px; color: #555; }
-
-        .loan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .stat-box { background: rgba(0,0,0,0.03); padding: 8px; border-radius: 8px; text-align: center; }
-        .stat-label { font-size: 0.7rem; color: #888; }
-        .stat-val { font-weight: 700; font-size: 0.9rem; }
+        .m-name { font-weight: 700; font-size: 1.1rem; color: #333; }
+        .m-phone { font-size: 0.9rem; color: #666; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+        .m-address { font-size: 0.85rem; color: #555; font-style: italic; margin-top: 5px; }
         
-        .text-danger { color: #ef4444 !important; }
-        .text-success { color: #22c55e !important; }
-
-        /* --- 3. FIXED FOOTER --- */
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            background: var(--card-bg);
-            border-top: 2px solid rgba(255, 107, 53, 0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 15px;
-            font-size: 0.75rem;
-            z-index: 1000; /* Stay on top */
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        .class-badge {
+            position: absolute; top: 15px; right: 15px;
+            padding: 2px 10px; border-radius: 15px;
+            font-size: 0.75rem; font-weight: 600; color: white;
         }
+        .badge-a { background: var(--primary-orange); }
+        .badge-b { background: #3b82f6; }
+
+        /* Footer */
+        .footer {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 50px;
+            background: rgba(255,255,255,0.95); border-top: 1px solid rgba(255, 107, 53, 0.3);
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .home-icon { font-size: 1.5rem; color: var(--primary-orange); cursor: pointer; }
+
     </style>
 </head>
 <body>
 
     <header class="header-container">
-        <button id="backBtn" class="back-btn">
-            <i class="fas fa-arrow-left"></i>
-        </button>
         <img src="head.png" alt="Header" class="header-image" onerror="this.style.display='none'">
     </header>
 
     <main class="content-wrapper">
-        <h1 class="page-title"><i class="fas fa-users me-2"></i>Members List</h1>
         
-        <div class="search-box">
-            <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search members...">
-        </div>
+        <input type="text" id="searchBox" class="form-control mb-3" placeholder="Search members..." 
+               style="border-radius: 25px; padding: 10px 20px; border:none; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
 
-        <div class="members-list" id="membersList">
-            <div style="text-align: center; color: white; margin-top: 20px;">
+        <div id="membersContainer">
+            <div class="text-center text-white mt-5">
                 <i class="fas fa-spinner fa-spin fa-2x"></i>
-                <p class="mt-2">Connecting to database...</p>
+                <p class="mt-2">Loading members list...</p>
             </div>
         </div>
+
     </main>
 
     <footer class="footer">
-        <div style="font-weight: 500;">Powered by VTSoft 2025</div>
-        <button id="themeToggle" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌞</button>
+        <i class="fas fa-home home-icon" onclick="window.location.href='index.html'"></i>
     </footer>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -208,172 +114,103 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script>
-        // Back Button
-        document.getElementById('backBtn').addEventListener('click', () => {
-            window.location.href = 'index.html';
+        const firebaseConfig = { apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A", authDomain: "unarv-33742.firebaseapp.com", projectId: "unarv-33742" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        let allMembersA = [];
+        let allMembersB = [];
+
+        auth.onAuthStateChanged(user => {
+            if (user) loadMembers();
+            else window.location.href = 'login.html';
         });
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A",
-            authDomain: "unarv-33742.firebaseapp.com",
-            projectId: "unarv-33742",
-            storageBucket: "unarv-33742.firebasestorage.app",
-            messagingSenderId: "682302871290",
-            appId: "1:682302871290:web:e0fb6742752bbeb6515b43"
-        };
+        async function loadMembers() {
+            try {
+                const snap = await db.collection('users').get();
+                
+                allMembersA = [];
+                allMembersB = [];
 
-        try {
-            firebase.initializeApp(firebaseConfig);
-            const auth = firebase.auth();
-            const db = firebase.firestore();
-            const membersListEl = document.getElementById('membersList');
-
-            auth.onAuthStateChanged((user) => {
-                if (user) {
-                    // Start Loading
-                    loadMembers();
-                } else {
-                    window.location.href = 'login.html';
-                }
-            });
-
-            async function loadMembers() {
-                try {
-                    console.log("Starting to fetch members...");
-                    
-                    // 1. Fetch Users
-                    const usersSnap = await db.collection('users').get();
-                    
-                    if (usersSnap.empty) {
-                        membersListEl.innerHTML = `<div class="text-center text-white">No members found in 'users' collection.</div>`;
-                        return;
+                snap.forEach(doc => {
+                    const m = doc.data();
+                    // Separate based on Class
+                    if (m.memberClass === 'B') {
+                        allMembersB.push(m);
+                    } else {
+                        // Default to A if not specified
+                        allMembersA.push(m);
                     }
+                });
 
-                    let membersData = [];
+                // Sort Alphabetically
+                allMembersA.sort((a, b) => a.name.localeCompare(b.name));
+                allMembersB.sort((a, b) => a.name.localeCompare(b.name));
 
-                    // 2. Loop through users
-                    // NOTE: Using Promise.all for faster loading instead of loop with await
-                    const promises = usersSnap.docs.map(async (doc) => {
-                        const user = doc.data();
-                        const uid = doc.id;
-                        
-                        let totalLoan = 0;
-                        let balance = 0;
-                        let pendingDues = 0;
+                renderList();
 
-                        try {
-                            // Fetch Loans
-                            const loansSnap = await db.collection('loans')
-                                .where('userId', '==', uid) // Ensure 'userId' field exists in loans
-                                .where('status', '==', 'active')
-                                .get();
-                            
-                            loansSnap.forEach(l => {
-                                totalLoan += parseFloat(l.data().amount) || 0;
-                                balance += parseFloat(l.data().balance) || 0;
-                            });
-
-                            // Fetch Dues
-                            const duesSnap = await db.collection('payments')
-                                .where('userId', '==', uid)
-                                .where('status', '==', 'pending')
-                                .get();
-                            pendingDues = duesSnap.size;
-                        } catch (err) {
-                            console.error("Error fetching financial data for user " + uid, err);
-                            // Continue even if financial data fails
-                        }
-
-                        return {
-                            ...user,
-                            id: uid,
-                            totalLoan,
-                            balance,
-                            pendingDues
-                        };
-                    });
-
-                    membersData = await Promise.all(promises);
-                    renderMembers(membersData);
-
-                    // Search Logic
-                    document.getElementById('searchInput').addEventListener('input', (e) => {
-                        const term = e.target.value.toLowerCase();
-                        const filtered = membersData.filter(m => 
-                            (m.name && m.name.toLowerCase().includes(term))
-                        );
-                        renderMembers(filtered);
-                    });
-
-                } catch (error) {
-                    console.error("Main Error:", error);
-                    let msg = "Error loading data.";
-                    if (error.code === 'permission-denied') {
-                        msg = "Permission Denied! Check Firestore Rules.";
-                    }
-                    membersListEl.innerHTML = `
-                        <div class="text-center text-white">
-                            <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
-                            <p>${msg}</p>
-                            <small>${error.message}</small>
-                        </div>`;
-                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('membersContainer').innerHTML = `<div class="text-center text-white">Error loading members.</div>`;
             }
-
-            function renderMembers(data) {
-                if (data.length === 0) {
-                    membersListEl.innerHTML = `<div class="text-center text-white">No members match search.</div>`;
-                    return;
-                }
-
-                membersListEl.innerHTML = data.map(m => `
-                    <div class="member-card">
-                        <div class="member-header">
-                            <div class="member-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div style="flex:1">
-                                <div class="member-name">${m.name || 'Unknown'}</div>
-                                <span class="member-role">${m.role || 'Member'}</span>
-                            </div>
-                            ${m.pendingDues > 0 
-                                ? `<span class="badge bg-danger">${m.pendingDues} Due</span>` 
-                                : `<span class="badge bg-success">Ok</span>`
-                            }
-                        </div>
-                        
-                        <div class="loan-grid">
-                            <div class="stat-box">
-                                <div class="stat-label">Total Loan</div>
-                                <div class="stat-val">₹${(m.totalLoan || 0).toLocaleString()}</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">Balance</div>
-                                <div class="stat-val ${(m.balance || 0) > 0 ? 'text-danger' : 'text-success'}">
-                                    ₹${(m.balance || 0).toLocaleString()}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            // Theme Toggle
-            const themeToggle = document.getElementById('themeToggle');
-            themeToggle.addEventListener('click', () => {
-                const html = document.documentElement;
-                const newTheme = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-                html.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                themeToggle.textContent = newTheme === 'light' ? '🌞' : '🌙';
-            });
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            themeToggle.textContent = savedTheme === 'light' ? '🌞' : '🌙';
-
-        } catch (error) {
-            alert("Firebase Init Error: " + error.message);
         }
+
+        function renderList(filterTerm = '') {
+            const container = document.getElementById('membersContainer');
+            let html = '';
+
+            // Filter logic
+            const filterFn = m => m.name.toLowerCase().includes(filterTerm.toLowerCase()) || 
+                                  (m.phone && m.phone.includes(filterTerm));
+
+            const filteredA = allMembersA.filter(filterFn);
+            const filteredB = allMembersB.filter(filterFn);
+
+            // --- RENDER CLASS A ---
+            if (filteredA.length > 0) {
+                html += `<div class="section-title"><i class="fas fa-star me-2"></i>Class A Members</div>`;
+                html += filteredA.map(m => createCard(m, 'A')).join('');
+            }
+
+            // --- RENDER CLASS B ---
+            if (filteredB.length > 0) {
+                html += `<div class="section-title mt-4"><i class="fas fa-user-friends me-2"></i>Class B Members</div>`;
+                html += filteredB.map(m => createCard(m, 'B')).join('');
+            }
+
+            if (filteredA.length === 0 && filteredB.length === 0) {
+                html = `<div class="text-center text-white mt-5">No members found.</div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function createCard(m, cls) {
+            const cardClass = cls === 'A' ? 'card-class-a' : 'card-class-b';
+            const badgeClass = cls === 'A' ? 'badge-a' : 'badge-b';
+            
+            return `
+            <div class="member-card ${cardClass}">
+                <span class="class-badge ${badgeClass}">Class ${cls}</span>
+                <div class="m-name">${m.name}</div>
+                <a href="tel:${m.phone}" class="m-phone">
+                    <i class="fas fa-phone-alt"></i> ${m.phone}
+                </a>
+                <div class="m-address">
+                    <i class="fas fa-map-marker-alt me-1 text-secondary"></i>
+                    ${m.address || 'Address not provided'}
+                </div>
+            </div>
+            `;
+        }
+
+        // Search Listener
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            renderList(e.target.value);
+        });
+
     </script>
 </body>
 </html>
