@@ -15,7 +15,6 @@
             --orange-dark: #E55A2B;
             --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
             --shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
-            --shadow-hover: 0 12px 35px rgba(255, 107, 53, 0.25);
             --card-bg: rgba(255, 255, 255, 0.95);
         }
 
@@ -35,6 +34,7 @@
             color: var(--text-color, #333);
             display: flex;
             flex-direction: column;
+            padding-bottom: 50px; /* Space for footer */
         }
 
         /* Header */
@@ -60,7 +60,7 @@
             padding: 20px 15px;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Aligned to top for scrolling forms */
+            align-items: flex-start;
         }
 
         /* Form Card */
@@ -73,35 +73,21 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             width: 100%;
             max-width: 500px;
-            margin-bottom: 50px; /* Space for footer */
+            margin-bottom: 20px;
         }
 
         .page-header {
-            display: flex;
-            align-items: center;
+            text-align: center;
             margin-bottom: 25px;
             border-bottom: 2px solid rgba(0,0,0,0.05);
             padding-bottom: 15px;
         }
 
-        .back-btn {
-            background: none;
-            border: none;
-            color: var(--text-color, #333);
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 5px;
-            margin-right: 15px;
-            transition: color 0.3s;
-        }
-
-        .back-btn:hover { color: var(--primary-orange); }
-
         .page-title {
             margin: 0;
             color: var(--primary-orange);
             font-weight: 600;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
         }
 
         /* Form Controls */
@@ -139,7 +125,7 @@
 
         .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
 
-        /* Footer */
+        /* Footer - Centered */
         .footer {
             position: fixed;
             bottom: 0;
@@ -148,9 +134,10 @@
             background: var(--card-bg);
             border-top: 2px solid rgba(255, 107, 53, 0.3);
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* Center Content */
             align-items: center;
             padding: 10px 15px;
+            gap: 15px; /* Space between text and icon */
             z-index: 100;
         }
 
@@ -161,6 +148,13 @@
             border: 1px solid var(--text-color, #ccc);
             border-radius: 12px;
             padding: 2px 8px;
+            cursor: pointer;
+        }
+        
+        /* Home Icon in Footer */
+        .home-icon {
+            font-size: 1.2rem;
+            color: var(--primary-orange);
             cursor: pointer;
         }
     </style>
@@ -175,9 +169,6 @@
         <div class="form-card">
             
             <div class="page-header">
-                <button class="back-btn" onclick="window.location.href='admin.html'">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
                 <h2 class="page-title">Add New Member</h2>
             </div>
 
@@ -199,6 +190,15 @@
                 </div>
 
                 <div class="mb-2">
+                    <label class="form-label">Member Class <span class="text-danger">*</span></label>
+                    <select class="form-select" id="memberClass">
+                        <option value="A" selected>Class A (With Subscription)</option>
+                        <option value="B">Class B (No Subscription)</option>
+                    </select>
+                    <small class="text-muted" style="font-size: 0.7rem;">Class B members need Class A surety for loans.</small>
+                </div>
+
+                <div class="mb-2">
                     <label class="form-label">Email (Login ID) <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
@@ -212,7 +212,7 @@
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         <input type="text" class="form-control mb-0" id="password" required placeholder="Min 6 chars" value="123456">
                     </div>
-                    <small class="text-muted" style="font-size: 0.7rem;">Default: 123456 (User can change later)</small>
+                    <small class="text-muted" style="font-size: 0.7rem;">Default: 123456</small>
                 </div>
 
                 <div class="mb-2">
@@ -236,6 +236,7 @@
     </div>
 
     <footer class="footer">
+        <i class="fas fa-home home-icon" onclick="window.location.href='admin.html'"></i>
         <div class="footer-text">VTSoft 2025</div>
         <button id="themeToggle" class="theme-toggle-btn">🌞</button>
     </footer>
@@ -255,19 +256,18 @@
             appId: "1:682302871290:web:e0fb6742752bbeb6515b43"
         };
 
-        // 2. Initialize Primary App (For Admin Authentication & DB Access)
+        // 2. Initialize Primary App
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // 3. Security Check: Ensure User is Admin
+        // 3. Security Check
         auth.onAuthStateChanged(async (user) => {
             if (!user) {
                 window.location.href = 'login.html';
             } else {
-                // Check if the current user is really an admin
                 const userDoc = await db.collection('users').doc(user.uid).get();
                 if (!userDoc.exists || userDoc.data().role !== 'admin') {
                     alert('Access Denied!');
@@ -280,15 +280,14 @@
         document.getElementById('addMemberForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Get Form Values
             const fullName = document.getElementById('fullName').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
             const role = document.getElementById('role').value;
             const address = document.getElementById('address').value.trim();
+            const memberClass = document.getElementById('memberClass').value; // Get Class A/B
 
-            // Validation
             if (password.length < 6) {
                 alert('Password must be at least 6 characters!');
                 return;
@@ -298,25 +297,17 @@
             const originalBtnText = btn.innerHTML;
             
             try {
-                // Show Loading
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
 
-                // --- CRITICAL STEP: SECONDARY APP ---
-                // We create a secondary app instance to create the new user.
-                // This prevents the current Admin from being logged out.
+                // Create user using Secondary App (to avoid admin logout)
                 const secondaryApp = firebase.initializeApp(firebaseConfig, "SecondaryApp");
-                
-                // Create Auth User in Secondary App
                 const userCredential = await secondaryApp.auth().createUserWithEmailAndPassword(email, password);
                 const newUserId = userCredential.user.uid;
-
-                // Logout from Secondary App & Delete it (Cleanup)
                 await secondaryApp.auth().signOut();
                 await secondaryApp.delete();
 
-                // --- DATA SAVING ---
-                // Now use the PRIMARY 'db' (where Admin is logged in) to save details to Firestore
+                // Save to Firestore with 'memberClass'
                 await db.collection('users').doc(newUserId).set({
                     uid: newUserId,
                     name: fullName,
@@ -324,14 +315,14 @@
                     email: email,
                     role: role,
                     address: address,
+                    memberClass: memberClass, // Saved here ('A' or 'B')
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     status: 'active'
                 });
 
-                // Success
-                alert(`✅ Member Created Successfully!\nName: ${fullName}`);
+                alert(`✅ Member Created Successfully!\nName: ${fullName}\nClass: ${memberClass}`);
                 document.getElementById('addMemberForm').reset();
-                document.getElementById('password').value = "123456"; // Reset default password
+                document.getElementById('password').value = "123456";
 
             } catch (error) {
                 console.error("Error:", error);
@@ -341,13 +332,12 @@
                 }
                 alert("❌ Failed: " + msg);
             } finally {
-                // Restore Button
                 btn.disabled = false;
                 btn.innerHTML = originalBtnText;
             }
         });
 
-        // Theme Toggle Logic (Same as before)
+        // Theme Toggle
         const themeToggle = document.getElementById('themeToggle');
         themeToggle.addEventListener('click', () => {
             const html = document.documentElement;
