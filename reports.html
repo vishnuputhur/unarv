@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ml" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Financial Reports</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #FF6B35;
+            --gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA726 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-color);
+            padding-top: 80px; padding-bottom: 60px;
+            overflow-x: hidden;
+        }
+
+        /* Fixed Header */
+        .header-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header-image { height: 40px; width: auto; object-fit: contain; }
+
+        /* Content */
+        .content-wrapper { padding: 15px; display: flex; flex-direction: column; align-items: center; width: 100%; }
+
+        /* Filter Card */
+        .filter-card {
+            background: var(--card-bg); border-radius: 12px; padding: 15px;
+            width: 100%; max-width: 500px; margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .filter-label { font-size: 0.8rem; font-weight: 600; color: #666; }
+
+        /* Report Cards */
+        .report-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+            width: 100%; max-width: 500px; margin-bottom: 20px;
+        }
+        .stat-card {
+            background: var(--card-bg); padding: 15px; border-radius: 12px;
+            text-align: center; border-bottom: 4px solid #ddd;
+        }
+        .st-val { font-size: 1.2rem; font-weight: 700; display: block; margin-bottom: 5px; }
+        .st-lbl { font-size: 0.75rem; color: #666; }
+
+        .border-green { border-bottom-color: #10b981; } /* Income */
+        .border-blue { border-bottom-color: #3b82f6; } /* Loan Repay */
+        .border-red { border-bottom-color: #ef4444; } /* Expense */
+        
+        /* Net Balance */
+        .net-card {
+            background: var(--gradient); color: white; border-radius: 15px;
+            padding: 20px; width: 100%; max-width: 500px; text-align: center;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 40px;
+            background: var(--card-bg); border-top: 1px solid rgba(255, 107, 53, 0.3);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; font-size: 0.8rem; font-weight: 500; color: #666;
+        }
+        .home-icon { font-size: 1.2rem; color: var(--primary-orange); cursor: pointer; position: absolute; left: 20px; }
+
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <img src="head.png" alt="Header" class="header-image" onerror="this.style.display='none'">
+    </header>
+
+    <main class="content-wrapper">
+        <h4 style="color:white; margin-bottom:15px;">Financial Report</h4>
+
+        <div class="filter-card">
+            <div class="row g-2 align-items-end">
+                <div class="col-5">
+                    <div class="filter-label">From</div>
+                    <input type="date" id="dateFrom" class="form-control form-control-sm">
+                </div>
+                <div class="col-5">
+                    <div class="filter-label">To</div>
+                    <input type="date" id="dateTo" class="form-control form-control-sm">
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-sm btn-primary w-100" onclick="generateReport()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="net-card mb-3">
+            <small style="opacity:0.9">Net Balance (In Hand)</small>
+            <div style="font-size:2rem; font-weight:700;" id="netBalance">₹0</div>
+        </div>
+
+        <div class="report-grid">
+            <div class="stat-card border-green">
+                <span class="st-val text-success" id="totalSub">₹0</span>
+                <span class="st-lbl">Subscriptions</span>
+            </div>
+            <div class="stat-card border-blue">
+                <span class="st-val text-primary" id="totalLoanRepay">₹0</span>
+                <span class="st-lbl">Loan Repayments</span>
+            </div>
+            <div class="stat-card border-red">
+                <span class="st-val text-danger" id="totalExp">₹0</span>
+                <span class="st-lbl">Total Expenses</span>
+            </div>
+            <div class="stat-card border-red">
+                <span class="st-val text-danger" id="totalInvReturn">₹0</span>
+                <span class="st-lbl">Inv. Returns</span>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <i class="fas fa-home home-icon" onclick="window.location.href='admin.html'"></i>
+        Powered by VTSoft 2026
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyAmfVO3bXxDkdujx8frw5e5h9Rc4heNv9A", authDomain: "unarv-33742.firebaseapp.com", projectId: "unarv-33742" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Set default dates (This Month)
+        const date = new Date();
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        
+        document.getElementById('dateFrom').valueAsDate = firstDay;
+        document.getElementById('dateTo').valueAsDate = lastDay;
+
+        auth.onAuthStateChanged(user => {
+            if(user) generateReport();
+            else window.location.href = 'login.html';
+        });
+
+        async function generateReport() {
+            const from = document.getElementById('dateFrom').value;
+            const to = document.getElementById('dateTo').value;
+            
+            document.getElementById('netBalance').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+            try {
+                // Fetch Data in Parallel
+                const [subs, loans, exps, returns] = await Promise.all([
+                    fetchSum('subscriptions', from, to),
+                    fetchSum('loan_transactions', from, to),
+                    fetchSum('expenses', from, to),
+                    fetchSum('investment_transactions', from, to)
+                ]);
+
+                // Update UI
+                document.getElementById('totalSub').innerText = `₹${subs.toLocaleString()}`;
+                document.getElementById('totalLoanRepay').innerText = `₹${loans.toLocaleString()}`;
+                document.getElementById('totalExp').innerText = `₹${exps.toLocaleString()}`;
+                document.getElementById('totalInvReturn').innerText = `₹${returns.toLocaleString()}`;
+
+                // Calculate Net
+                const totalIncome = subs + loans;
+                const totalExpense = exps + returns;
+                const net = totalIncome - totalExpense;
+
+                document.getElementById('netBalance').innerText = `₹${net.toLocaleString()}`;
+
+            } catch (error) {
+                console.error(error);
+                alert("Error generating report");
+            }
+        }
+
+        async function fetchSum(collection, fromDate, toDate) {
+            let sum = 0;
+            // Note: Simple string comparison for dates works for YYYY-MM-DD
+            const snap = await db.collection(collection)
+                .where('date', '>=', fromDate)
+                .where('date', '<=', toDate)
+                .get();
+            
+            snap.forEach(doc => {
+                sum += (parseFloat(doc.data().amount) || 0);
+            });
+            return sum;
+        }
+    </script>
+</body>
+</html>
